@@ -300,6 +300,30 @@ GUIDES["new-investor-checklist.html"] = dict(
     ctas=cta("/tools/html_machines/Allocation_in_Action.html", "Test your mix in history") + "\n" + cta("/resources/fee-check.html", "Run the Fee Check", False),
 )
 
+
+GUIDES["resp-free-money.html"] = dict(
+    title="The RESP: Free Money for School", read_min=4,
+    desc="Canada matches RESP contributions with a 20% grant most families never fully collect. How the account works and how not to leave money on the table.",
+    h1="The RESP: the match most parents miss",
+    lede="The government adds 20 cents to every dollar you put into a Registered Education Savings Plan, up to annual and lifetime grant limits. It's the closest thing to free money in Canadian personal finance — and huge amounts of it go unclaimed every year.",
+    content="""      <h2>How it works</h2>
+      <p>An RESP is a container for a child's education savings. Contributions aren't tax-deductible, but the growth is tax-sheltered — and the Canada Education Savings Grant (CESG) tops up your contributions by 20%, deposited straight into the account, up to yearly and lifetime grant limits. When the money comes out for post-secondary education, the growth and grants are taxed in the student's hands, which usually means little or no tax at all. Lower-income families can qualify for additional grant money on top, and unused grant room carries forward within limits.</p>
+      <h2>The order still matters</h2>
+      <p>The RESP's 20% match is excellent — but an employer's RRSP match (often 50–100%) still beats it, and 21% credit-card debt still outranks both. Slot the RESP into your order of operations after those, alongside your TFSA/RRSP decisions, not instead of them. Your own retirement stays ahead of the kids' tuition: they can borrow for school; you can't borrow for retirement.</p>
+      <h2>What to hold inside it</h2>
+      <p>Same logic as every container: match the contents to the timeline. A newborn's RESP has nearly two decades — a diversified, low-fee mix makes sense. A sixteen-year-old's RESP is three years from withdrawals — that money belongs somewhere boring. Beware the group/pooled "scholarship plan" salespeople who circle new parents: fee structures there can be brutal, and a self-directed RESP at any brokerage does the same job for a fraction of the cost.</p>
+      <h2>If the kid doesn't go</h2>
+      <p>The account can stay open for decades, transfer to a sibling, or wind down — grants return to the government, contributions come back to you, and growth can often move into your RRSP if you have room. The worst case is mild, which is exactly what you want from a plan.</p>""",
+    checklist=check([
+        "Open a self-directed RESP at a brokerage — not a group scholarship plan",
+        "Contribute enough to collect the full 20% grant each year",
+        "Check current grant limits and any extra low-income grants on canada.ca",
+        "Match the investments to the years until school",
+        "Shift to boring holdings as withdrawal years approach",
+    ]),
+    ctas=cta("/tools/html_machines/The_Hindsight_Machine.html", "See 18 years of compounding") + "\n" + cta("/resources/tfsa-vs-rrsp.html", "TFSA vs RRSP", False),
+)
+
 # ---- Hub page ----
 def hub_card(fname, g):
     return f"""        <a class="machine" href="/resources/{fname}">
