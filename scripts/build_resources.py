@@ -18,7 +18,7 @@ SHELL = """<!doctype html>
   <title>{title} — Just a Boring Banker</title>
   <meta name="description" content="{desc}">
   <link rel="canonical" href="https://justaboringbanker.com/resources/{fname}">
-  <link rel="icon" href="/assets/icons/alex-placeholder.svg" type="image/svg+xml">
+  <link rel="icon" href="/assets/images/favicon.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -29,7 +29,7 @@ SHELL = """<!doctype html>
 <header class="site-header">
   <div class="wrap nav">
     <a class="brand" href="/">
-      <img src="/assets/icons/alex-placeholder.svg" alt="" width="34" height="34">
+      <img src="/assets/images/alex.png" alt="" height="34">
       Just a Boring Banker
     </a>
     <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu">

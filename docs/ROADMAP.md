@@ -20,7 +20,8 @@ _Last updated: 10 Sept 2026 (initial build)_
 
 - [x] About rebuilt (Sept 10) with real story: 23 years at TD Wealth, Ryan's mission quote, both headshots; nav renamed "Meet the Banker"
 - [ ] Optional from Ryan: professional designations/licences to strengthen EEAT further
-- [ ] Still needed from Ryan: real Alex SVG + banner (headshots are in); placeholder Alex remains in header/favicons
+- [x] Real Alex in header + favicon (extracted from original banner, Sept 10); homepage hero now Ryan's portrait
+- [ ] Nice-to-have from Ryan: high-res/vector Alex for large-size use (current extraction is 100px — fine at header size, too soft for heroes)
 - [ ] Ryan to sanity-check the rebuilt machines against his originals (logic was rebuilt from behaviour, not copied — his source wasn't retrievable)
 - [ ] Confirm conversion hierarchy: YouTube primary, Boring Brief secondary (working assumption)
 - [ ] Contact email for footer
