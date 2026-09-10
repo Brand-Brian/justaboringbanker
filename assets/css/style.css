@@ -80,8 +80,11 @@ section + section { border-top: 1px solid var(--rule); }
   cursor: pointer; text-decoration: none;
   transition: background-color 140ms ease, color 140ms ease;
 }
-.btn-primary { background: var(--vault); color: var(--paper); }
-.btn-primary:hover { background: var(--vault-deep); }
+.btn-primary {
+  background: linear-gradient(135deg, var(--mint-1), var(--mint-2));
+  color: var(--ink); border-color: transparent;
+}
+.btn-primary:hover { background: linear-gradient(135deg, #6bd49a, #268a5d); color: var(--ink); }
 .btn-ghost { background: transparent; color: var(--vault); }
 .btn-ghost:hover { background: var(--paper-tint); }
 
@@ -191,13 +194,13 @@ section + section { border-top: 1px solid var(--rule); }
 .machine .try { margin-top: auto; padding-top: 10px; font-weight: 600; color: var(--vault); }
 
 /* ---------- Series ---------- */
-.series-band { background: var(--vault); color: var(--paper); }
+.series-band { background: linear-gradient(135deg, var(--mint-1), var(--mint-2)); color: var(--ink); }
 .series-band h2, .series-band p { color: inherit; }
-.series-band .lede { color: color-mix(in srgb, var(--paper) 78%, var(--mint-1)); }
-.series-band .btn-primary { background: var(--highlight); border-color: var(--highlight); color: var(--ink); }
-.series-band .btn-primary:hover { background: #eecb2f; border-color: #eecb2f; }
-.series-band .btn-ghost { color: var(--paper); border-color: color-mix(in srgb, var(--paper) 55%, transparent); }
-.series-band .btn-ghost:hover { background: color-mix(in srgb, var(--paper) 10%, transparent); }
+.series-band .lede { color: var(--vault-deep); }
+.series-band .btn-primary { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.series-band .btn-primary:hover { background: #000; border-color: #000; color: var(--paper); }
+.series-band .btn-ghost { color: var(--vault-deep); border-color: var(--vault-deep); }
+.series-band .btn-ghost:hover { background: color-mix(in srgb, var(--ink) 8%, transparent); }
 
 .episode-grid {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -247,9 +250,9 @@ section + section { border-top: 1px solid var(--rule); }
 .footer-links a { color: var(--ink-soft); }
 .disclaimer { margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--rule); max-width: none; }
 
-/* Nav CTA fix: .nav-links a was out-ranking .btn colors */
-.nav-links a.btn-primary { color: var(--paper); }
-.nav-links a.btn-primary:hover { color: var(--paper); background: var(--vault-deep); }
+/* Nav CTA: ensure button colors out-rank nav link color */
+.nav-links a.btn-primary { color: var(--ink); }
+.nav-links a.btn-primary:hover { color: var(--ink); }
 .btn .yt-icon { width: 20px; height: 20px; flex: none; }
 
 /* About page */
