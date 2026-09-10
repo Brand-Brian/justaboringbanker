@@ -12,18 +12,19 @@ _Last updated: 10 Sept 2026 (initial build)_
 - [x] Machines hub (`tools/index.html`)
 - [x] `netlify.toml`, `robots.txt`, `sitemap.xml`, 404 page
 - [x] Boring Brief form wired to Netlify Forms
+- [x] All four machines rebuilt in-brand (Sept 10): shared engine + approx. annual historical data, GIC framing, mobile-friendly, same filenames as original for URL continuity
 
 ## Blocked on Ryan (before launch)
 
 - [ ] Replace every `[PLACEHOLDER]` in `about.html` with real bio/credentials — EEAT-critical, do not invent
 - [ ] Supply real assets → `assets/icons/` and `assets/images/` (Alex SVG, headshot, banner); placeholder Alex is a stand-in
-- [ ] Copy the four calculator HTML files from the current site into `/tools/` (links currently point at the live justaboringbanker.com URLs so nothing breaks meanwhile)
+- [ ] Ryan to sanity-check the rebuilt machines against his originals (logic was rebuilt from behaviour, not copied — his source wasn't retrievable)
 - [ ] Confirm conversion hierarchy: YouTube primary, Boring Brief secondary (working assumption)
 - [ ] Contact email for footer
 
 ## Next build phases
 
-1. **Calculator restyle** — wrap each tool in the new shell, audit at 360px
+1. ~~Calculator restyle~~ — done; next: consider monthly-granularity data + TSX index option
 2. **Episode rollout** — real episode cards + VideoObject schema as videos ship
 3. **Privacy policy page** — required before adding analytics
 4. **Article template** — author byline + schema, for future written content
