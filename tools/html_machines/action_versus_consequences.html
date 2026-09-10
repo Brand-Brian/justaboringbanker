@@ -73,7 +73,7 @@
           <div class="tooltip" id="tooltip" hidden></div>
         </div>
         <div class="window-row">
-          <span>Window: <strong id="win-label"></strong></span>
+          <span>Timeline <strong id="win-label"></strong><br><span class="win-hint">Drag either end — the right handle is "today": pull it left to hide the future, right to reveal it.</span></span>
           <span class="ranges">
             <input type="range" id="win-lo" aria-label="Window start year">
             <input type="range" id="win-hi" aria-label="Window end year">
@@ -189,7 +189,14 @@ $("buy").addEventListener("click", () => { g.value += g.cash; g.cash = 0; g.inve
   $("status").textContent = "INVESTED"; $("status").classList.remove("out"); });
 $("step").addEventListener("click", stepYear);
 $("reset").addEventListener("click", newGame);
-JBB.rangeWindow($("win-lo"), $("win-hi"), $("win-label"), newGame).fire();
+let lastLo = null;
+JBB.rangeWindow($("win-lo"), $("win-hi"), $("win-label"), (lo, hi) => {
+  if (g === null || g.blind || lo !== lastLo) { lastLo = lo; newGame(); return; }
+  lastLo = lo;
+  if (g.years.length > (hi - g.lo + 1)) { newGame(); return; } // can't un-live years
+  g.hi = hi;
+  while (g.y <= g.hi) { if (!stepYear()) break; }
+}).fire();
 ["start","monthly","blind"].forEach(id => $(id).addEventListener("input", newGame));
 </script>
 </body>

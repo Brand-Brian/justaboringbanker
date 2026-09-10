@@ -86,3 +86,4 @@
 .data-note { font-size: 0.85rem; color: var(--ink-soft); margin-top: 18px; max-width: none; }
 .machine-explainer { margin-top: 48px; max-width: 720px; }
 .machine-explainer h2 { font-size: 1.5rem; }
+.win-hint { font-size: 0.82rem; color: var(--ink-soft); font-weight: 400; }

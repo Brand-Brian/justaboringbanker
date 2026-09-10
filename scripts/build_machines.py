@@ -64,7 +64,7 @@ SHELL = """<!doctype html>
           <div class="tooltip" id="tooltip" hidden></div>
         </div>
         <div class="window-row">
-          <span>Window: <strong id="win-label"></strong></span>
+          <span>Timeline <strong id="win-label"></strong><br><span class="win-hint">Drag either end — the right handle is "today": pull it left to hide the future, right to reveal it.</span></span>
           <span class="ranges">
             <input type="range" id="win-lo" aria-label="Window start year">
             <input type="range" id="win-hi" aria-label="Window end year">
@@ -148,7 +148,7 @@ PAGES["The_Hindsight_Machine.html"] = dict(
         </div>""",
     stats=stat("v-port", "Portfolio") + stat("v-inv", "Invested") + stat("v-ret", "Return (ann.)") + stat("v-gic", "GIC at 4%"),
     explainer="""      <h2>What this machine teaches</h2>
-      <p>Every crash on this chart felt like the end of the world at the time. The shaded bands are the moments people panicked — and the line that keeps climbing is what happened to the people who didn't. Hover anywhere to see the year-by-year numbers, and compare against the GIC line: safety has a price, and now you can see exactly what it is.</p>""",
+      <p>Every crash on this chart felt like the end of the world at the time. The shaded bands are the moments people panicked — and the line that keeps climbing is what happened to the people who didn't. Hover anywhere to see the year-by-year numbers, and compare against the GIC line: safety has a price, and now you can see exactly what it is. And try the timeline's right handle: pull it back to some point in the past, then drag it forward slowly — you're revealing history the way the people living it experienced it, one year at a time, with no idea what came next.</p>""",
     script="""const $ = id => document.getElementById(id);
 const ch = JBB.chart($("chart"), $("tooltip"));
 const MIN = JBB.minYear(), MAX = JBB.maxYear();
@@ -212,7 +212,7 @@ PAGES["Withdrawal_Scenarios.html"] = dict(
         </div>""",
     stats=stat("v-port", "Portfolio") + stat("v-inv", "Invested") + stat("v-ret", "Return (ann.)") + stat("v-wd", "Withdrawn") + stat("v-gic", "GIC at 4%"),
     explainer="""      <h2>What this machine teaches</h2>
-      <p>The order of returns matters enormously once you start withdrawing. Retire into a crash and the same portfolio, same withdrawals, tells a very different story than retiring into a boom. Slide the withdrawal start year around and watch the ending change — that's sequence risk, and it's the whole reason retirement income planning exists.</p>""",
+      <p>The order of returns matters enormously once you start withdrawing. Retire into a crash and the same portfolio, same withdrawals, tells a very different story than retiring into a boom. Slide the withdrawal start year around and watch the ending change — that's sequence risk, and it's the whole reason retirement income planning exists. Use the timeline's right handle the honest way: drag it back, then reveal forward year by year, and feel what it's like to not know whether your retirement decade cooperates.</p>""",
     script="""const $ = id => document.getElementById(id);
 const ch = JBB.chart($("chart"), $("tooltip"));
 const MIN = JBB.minYear(), MAX = JBB.maxYear();
@@ -364,7 +364,14 @@ $("buy").addEventListener("click", () => { g.value += g.cash; g.cash = 0; g.inve
   $("status").textContent = "INVESTED"; $("status").classList.remove("out"); });
 $("step").addEventListener("click", stepYear);
 $("reset").addEventListener("click", newGame);
-JBB.rangeWindow($("win-lo"), $("win-hi"), $("win-label"), newGame).fire();
+let lastLo = null;
+JBB.rangeWindow($("win-lo"), $("win-hi"), $("win-label"), (lo, hi) => {
+  if (g === null || g.blind || lo !== lastLo) { lastLo = lo; newGame(); return; }
+  lastLo = lo;
+  if (g.years.length > (hi - g.lo + 1)) { newGame(); return; } // can't un-live years
+  g.hi = hi;
+  while (g.y <= g.hi) { if (!stepYear()) break; } // scrub forward reveals year by year
+}).fire();
 ["start","monthly","profile","compare","blind"].forEach(id => $(id).addEventListener("input", newGame));"""
 )
 
@@ -450,7 +457,14 @@ $("buy").addEventListener("click", () => { g.value += g.cash; g.cash = 0; g.inve
   $("status").textContent = "INVESTED"; $("status").classList.remove("out"); });
 $("step").addEventListener("click", stepYear);
 $("reset").addEventListener("click", newGame);
-JBB.rangeWindow($("win-lo"), $("win-hi"), $("win-label"), newGame).fire();
+let lastLo = null;
+JBB.rangeWindow($("win-lo"), $("win-hi"), $("win-label"), (lo, hi) => {
+  if (g === null || g.blind || lo !== lastLo) { lastLo = lo; newGame(); return; }
+  lastLo = lo;
+  if (g.years.length > (hi - g.lo + 1)) { newGame(); return; } // can't un-live years
+  g.hi = hi;
+  while (g.y <= g.hi) { if (!stepYear()) break; }
+}).fire();
 ["start","monthly","blind"].forEach(id => $(id).addEventListener("input", newGame));"""
 )
 
