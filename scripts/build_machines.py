@@ -288,10 +288,12 @@ PAGES["Allocation_in_Action.html"] = dict(
           </div>
           <button class="btn btn-primary" id="step" style="width:100%;margin-top:10px">Next year</button>
           <button class="btn btn-ghost" id="reset" style="width:100%;margin-top:10px">Reset</button>
+          <label class="check" style="margin-top:8px"><input type="checkbox" id="blind"> Blind mode — hidden dates</label>
+          <p class="fine" id="reveal" style="margin:4px 0 0"></p>
         </div>""",
     stats=stat("v-you", "Your portfolio") + stat("v-hold", "Hold strategy") + stat("v-diff", "Outperforming by") + stat("v-inv", "Net invested") + stat("v-cash", "Cash sidelined"),
     explainer="""      <h2>What this machine teaches</h2>
-      <p>Two lessons hide in here. First, allocation: watch how the mixes behave differently through the same years — the bold line falls harder and climbs higher; the stable one barely notices. Second, timing: the hold line never blinks, never mistimes, never sits in cash during the good years. Play a few rounds and count how often you beat it. Then count what it cost you to try.</p>""",
+      <p>Two lessons hide in here. First, allocation: watch how the mixes behave differently through the same years — the bold line falls harder and climbs higher; the stable one barely notices. Second, timing: the hold line never blinks, never mistimes, never sits in cash during the good years. Play a few rounds and count how often you beat it. Then count what it cost you to try. For the honest version, flip on blind mode: a random stretch of real history with the dates hidden — because in real life, nobody tells you which year it is.</p>""",
     script="""const $ = id => document.getElementById(id);
 const ch = JBB.chart($("chart"), $("tooltip"));
 const MIN = JBB.minYear(), MAX = JBB.maxYear();
@@ -300,9 +302,16 @@ $("win-lo").value = 2000; $("win-hi").value = MAX;
 
 let g = null; // game state
 function newGame() {
-  const lo = +$("win-lo").value, hi = +$("win-hi").value;
+  const blind = $("blind").checked;
+  let lo = +$("win-lo").value, hi = +$("win-hi").value;
+  if (blind) {
+    const len = Math.max(10, hi - lo);
+    lo = MIN + Math.floor(Math.random() * Math.max(1, (MAX - len) - MIN + 1));
+    hi = lo + len;
+  }
+  $("reveal").textContent = blind ? "Dates hidden. Good luck out there." : "";
   const start = +$("start").value || 0, monthly = +$("monthly").value || 0;
-  g = { lo, hi, y: lo, invested: true, value: start, cash: 0, netIn: start, monthly,
+  g = { lo, hi, y: lo, blind, invested: true, value: start, cash: 0, netIn: start, monthly,
         you: [], years: [], profile: JBB_DATA.profiles[$("profile").value] };
   $("buy").disabled = true; $("sell").disabled = false;
   $("status").textContent = "INVESTED"; $("status").classList.remove("out");
@@ -319,7 +328,9 @@ function stepYear() {
   else g.cash += c;
   g.you.push(g.value + g.cash); g.years.push(g.y); g.y++;
   draw();
-  return g.y <= g.hi;
+  const more = g.y <= g.hi;
+  if (!more && g.blind) $("reveal").textContent = "Revealed: you just traded through " + g.lo + "\u2013" + g.hi + ".";
+  return more;
 }
 function draw() {
   const start = +$("start").value || 0, monthly = +$("monthly").value || 0;
@@ -334,7 +345,8 @@ function draw() {
     const c = JBB.simulate({ fromY: g.lo, toY: g.hi, start, monthly, profile: JBB_DATA.profiles[cmp] });
     series.unshift({ name: JBB_DATA.profiles[cmp].label, data: c.value.slice(0, Math.max(n, 1)), color: "#2fa872", width: 1.5, dash: [2,4] });
   }
-  ch.set(series, n ? g.years : [g.lo], true);
+  const labels = g.blind ? (n ? g.years.map((_, i) => "Y" + (i + 1)) : ["Y1"]) : (n ? g.years : [g.lo]);
+  ch.set(series, labels, !g.blind);
   const you = n ? g.you[n-1] : start, hv = n ? hold.value[n-1] : start;
   $("v-you").textContent = JBB.fmt(you);
   $("v-hold").textContent = JBB.fmt(hv);
@@ -353,7 +365,7 @@ $("buy").addEventListener("click", () => { g.value += g.cash; g.cash = 0; g.inve
 $("step").addEventListener("click", stepYear);
 $("reset").addEventListener("click", newGame);
 JBB.rangeWindow($("win-lo"), $("win-hi"), $("win-label"), newGame).fire();
-["start","monthly","profile","compare"].forEach(id => $(id).addEventListener("input", newGame));"""
+["start","monthly","profile","compare","blind"].forEach(id => $(id).addEventListener("input", newGame));"""
 )
 
 # ------------------------------------------------------- Actions vs Consequences
@@ -370,10 +382,12 @@ PAGES["action_versus_consequences.html"] = dict(
           </div>
           <button class="btn btn-primary" id="step" style="width:100%;margin-top:10px">Next year</button>
           <button class="btn btn-ghost" id="reset" style="width:100%;margin-top:10px">Reset</button>
+          <label class="check" style="margin-top:8px"><input type="checkbox" id="blind" checked> Blind mode — hidden dates</label>
+          <p class="fine" id="reveal" style="margin:4px 0 0"></p>
         </div>""",
     stats=stat("v-you", "Your portfolio") + stat("v-hold", "Stayed invested") + stat("v-diff", "Outperforming by") + stat("v-ret", "Return (ann.)") + stat("v-cash", "Cash sidelined"),
     explainer="""      <h2>What this machine teaches</h2>
-      <p>Missing the crash feels like genius. But the market's best years tend to arrive right beside its worst ones, and cash on the sidelines earns nothing while you wait to feel confident again. The gap between your line and the do-nothing line is the price of your feelings — this machine just puts a number on it.</p>""",
+      <p>Missing the crash feels like genius. But the market's best years tend to arrive right beside its worst ones, and cash on the sidelines earns nothing while you wait to feel confident again. The gap between your line and the do-nothing line is the price of your feelings — this machine just puts a number on it. It starts in blind mode: a random stretch of real market history with the dates hidden, exactly like real life — you can't see what's coming, only what's behind you. Sell if you dare; the reveal comes at the end.</p>""",
     script="""const $ = id => document.getElementById(id);
 const ch = JBB.chart($("chart"), $("tooltip"));
 const MIN = JBB.minYear(), MAX = JBB.maxYear();
@@ -383,9 +397,16 @@ const SP = { eq: 1, bd: 0 };
 
 let g = null;
 function newGame() {
-  const lo = +$("win-lo").value, hi = +$("win-hi").value;
+  const blind = $("blind").checked;
+  let lo = +$("win-lo").value, hi = +$("win-hi").value;
+  if (blind) {
+    const len = Math.max(10, hi - lo);
+    lo = MIN + Math.floor(Math.random() * Math.max(1, (MAX - len) - MIN + 1));
+    hi = lo + len;
+  }
+  $("reveal").textContent = blind ? "Dates hidden. Good luck out there." : "";
   const start = +$("start").value || 0;
-  g = { lo, hi, y: lo, invested: true, value: start, cash: 0, netIn: start,
+  g = { lo, hi, y: lo, blind, invested: true, value: start, cash: 0, netIn: start,
         monthly: +$("monthly").value || 0, you: [], years: [] };
   $("buy").disabled = true; $("sell").disabled = false;
   $("status").textContent = "INVESTED"; $("status").classList.remove("out");
@@ -399,16 +420,19 @@ function stepYear() {
   else g.cash += c;
   g.you.push(g.value + g.cash); g.years.push(g.y); g.y++;
   draw();
-  return g.y <= g.hi;
+  const more = g.y <= g.hi;
+  if (!more && g.blind) $("reveal").textContent = "Revealed: you just traded through " + g.lo + "\u2013" + g.hi + ".";
+  return more;
 }
 function draw() {
   const start = +$("start").value || 0, monthly = +$("monthly").value || 0;
   const hold = JBB.simulate({ fromY: g.lo, toY: g.hi, start, monthly, profile: SP });
   const n = g.you.length;
+  const labels = g.blind ? (n ? g.years.map((_, i) => "Y" + (i + 1)) : ["Y1"]) : (n ? g.years : [g.lo]);
   ch.set([
     { name: "Stayed invested", data: hold.value.slice(0, Math.max(n, 1)), color: "#3d4f47", width: 2, dash: [5,5] },
     { name: "You", data: n ? g.you : [start], color: "#1d4d3b", width: 3 }
-  ], n ? g.years : [g.lo], true);
+  ], labels, !g.blind);
   const you = n ? g.you[n-1] : start, hv = n ? hold.value[n-1] : start;
   $("v-you").textContent = JBB.fmt(you);
   $("v-hold").textContent = JBB.fmt(hv);
@@ -427,7 +451,7 @@ $("buy").addEventListener("click", () => { g.value += g.cash; g.cash = 0; g.inve
 $("step").addEventListener("click", stepYear);
 $("reset").addEventListener("click", newGame);
 JBB.rangeWindow($("win-lo"), $("win-hi"), $("win-label"), newGame).fire();
-["start","monthly"].forEach(id => $(id).addEventListener("input", newGame));"""
+["start","monthly","blind"].forEach(id => $(id).addEventListener("input", newGame));"""
 )
 
 
