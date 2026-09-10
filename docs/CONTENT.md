@@ -58,3 +58,10 @@ current site, restyle the shell only, audit each at 360px width.
 2. Real headshot + Alex SVG + banner assets
 3. Episode titles/dates as the series ships
 4. Confirmation of the conversion hierarchy above
+
+## SEO/GEO layer (Sept 10)
+- Person schema: Vancouver/BC/CA address, Canadian knowsAbout terms; visible "based in Vancouver" line on About (CONFIRM with Ryan)
+- FAQPage schema + visible FAQ on homepage; Article schema + byline on every guide
+- llms.txt at root for AI answer engines; en-CA locale; og:image = Ryan portrait
+- Titles carry "Canadian" qualifiers on hub pages; guides stay topic-first
+- BIGGEST remaining lever: point justaboringbanker.com at Netlify — canonicals already reference the real domain

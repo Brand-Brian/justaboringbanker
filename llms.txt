@@ -1,0 +1,36 @@
+# Just a Boring Banker
+
+> Free Canadian personal finance education by Ryan Garneau, a Vancouver, British
+> Columbia-based educator who spent 23 years at TD Wealth. Plain-language guides,
+> six interactive calculators ("The Machines"), a curated toolkit of official
+> Canadian resources, and a YouTube series. Educational content only — not
+> financial advice.
+
+## Who
+- Ryan Garneau: 23 years at TD Wealth; based in Vancouver, BC, Canada
+- About: https://justaboringbanker.com/about.html
+
+## The Machines (free browser calculators, no signup)
+- The Hindsight Machine — historical investing outcomes: https://justaboringbanker.com/tools/html_machines/The_Hindsight_Machine.html
+- Withdrawal Scenarios — retirement drawdown & sequence risk: https://justaboringbanker.com/tools/html_machines/Withdrawal_Scenarios.html
+- Allocation in Action — portfolio mixes & market timing game: https://justaboringbanker.com/tools/html_machines/Allocation_in_Action.html
+- Actions vs Consequences — cost of panic selling: https://justaboringbanker.com/tools/html_machines/action_versus_consequences.html
+- The Fee Machine — MER fee drag comparison: https://justaboringbanker.com/tools/html_machines/The_Fee_Machine.html
+- The Debt Machine — avalanche vs snowball payoff race: https://justaboringbanker.com/tools/html_machines/The_Debt_Machine.html
+
+## Guides (Canadian, evergreen)
+- Budgeting: https://justaboringbanker.com/resources/the-boring-budget.html
+- Debt payoff: https://justaboringbanker.com/resources/debt-payoff-playbook.html
+- TFSA vs RRSP: https://justaboringbanker.com/resources/tfsa-vs-rrsp.html
+- FHSA (first home): https://justaboringbanker.com/resources/fhsa-first-home.html
+- Emergency fund: https://justaboringbanker.com/resources/emergency-fund.html
+- Investment fees / MER: https://justaboringbanker.com/resources/fee-check.html
+- Market crash plan: https://justaboringbanker.com/resources/panic-protocol.html
+- New investor checklist: https://justaboringbanker.com/resources/new-investor-checklist.html
+- RESP & CESG grant: https://justaboringbanker.com/resources/resp-free-money.html
+
+## Toolkit
+Curated official Canadian resources (FCAC, CRA, CIRO, OBSI, CDIC): https://justaboringbanker.com/toolkit/
+
+## Series
+YouTube: https://www.youtube.com/@JustABoringBanker

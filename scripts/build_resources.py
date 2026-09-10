@@ -94,6 +94,7 @@ GUIDE_BODY = """  <section class="hero deco" style="padding-block: clamp(56px,8v
       <span class="kicker">Resources · {read_min}-minute read</span>
       <h1>{h1}</h1>
       <p class="lede">{lede}</p>
+      <p class="fine">By <a href="/about.html">Ryan Garneau</a> — 23 years at TD Wealth, based in Vancouver, BC · Updated September 2026</p>
     </div>
   </section>
   <section class="prose">
@@ -357,11 +358,27 @@ EXTRA_CSS_HUB = EXTRA_CSS  # same stylesheet has .machine styles
 for fname, g in GUIDES.items():
     body = GUIDE_BODY.format(**g)
     html = SHELL.format(fname=fname, title=g["title"], desc=g["desc"], body=body, yt=YT, current="")
+    schema = """  <script type="application/ld+json">
+  {
+    \"@context\": \"https://schema.org\",
+    \"@type\": \"Article\",
+    \"headline\": \"%s\",
+    \"description\": \"%s\",
+    \"inLanguage\": \"en-CA\",
+    \"datePublished\": \"2026-09-10\",
+    \"dateModified\": \"2026-09-10\",
+    \"author\": { \"@type\": \"Person\", \"name\": \"Ryan Garneau\", \"url\": \"https://justaboringbanker.com/about.html\" },
+    \"publisher\": { \"@type\": \"Person\", \"name\": \"Ryan Garneau\" },
+    \"mainEntityOfPage\": \"https://justaboringbanker.com/resources/%s\"
+  }
+  </script>
+</head>""" % (g["title"].replace('"', ''), g["desc"].replace('"', ''), fname)
+    html = html.replace("</head>", schema, 1)
     (OUT / fname).write_text(html)
     print("built", fname)
 
 cards = "\n".join(hub_card(f, g) for f, g in GUIDES.items())
-hub = SHELL.format(fname="", title="Resources", desc="Short, practical personal finance guides for Canadians — budgeting, debt, TFSA vs RRSP, FHSA, fees, and staying calm in crashes.",
+hub = SHELL.format(fname="", title="Canadian Personal Finance Guides — Resources", desc="Short, practical personal finance guides for Canadians — budgeting, debt, TFSA vs RRSP, FHSA, fees, and staying calm in crashes.",
                    body=HUB_BODY.format(cards=cards), yt=YT, current=' aria-current="page"')
 (OUT / "index.html").write_text(hub)
 print("built index.html (hub)")
