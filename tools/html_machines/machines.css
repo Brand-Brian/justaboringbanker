@@ -37,19 +37,23 @@
   border-radius: 8px; padding: 8px 12px; font-size: 0.85rem;
   display: flex; flex-direction: column; gap: 3px; max-width: 200px; z-index: 5;
 }
+.tooltip[hidden] { display: none; }
 .tooltip i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; }
 
-.window-row { display: grid; grid-template-columns: auto 1fr; gap: 10px 14px; align-items: center; margin-top: 14px; font-size: 0.92rem; }
-.window-row .ranges { position: relative; height: 28px; }
+/* Label above, full-width track below — the track always spans the chart, never
+   gets squeezed to a sliver by the hint text at any viewport width. */
+.window-row { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; align-items: center; margin-top: 14px; font-size: 0.92rem; }
+.window-row > span:first-child { min-width: 0; }
+.window-row .ranges { position: relative; height: 34px; min-width: 0; display: block; }
 .window-row input[type="range"] {
   position: absolute; inset: 0; width: 100%; margin: 0;
-  -webkit-appearance: none; appearance: none; background: none; pointer-events: none; height: 28px;
+  -webkit-appearance: none; appearance: none; background: none; pointer-events: none; height: 34px;
 }
 .window-row input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none; pointer-events: auto;
   width: 22px; height: 22px; border-radius: 50%;
   background: var(--vault); border: 3px solid #fff; box-shadow: 0 0 0 1px var(--rule);
-  cursor: grab; margin-top: -9px;
+  cursor: grab; margin-top: -12px;
 }
 .window-row input[type="range"]::-moz-range-thumb {
   pointer-events: auto; width: 18px; height: 18px; border-radius: 50%;
@@ -57,6 +61,8 @@
 }
 .window-row input[type="range"]::-webkit-slider-runnable-track { height: 4px; background: var(--rule); border-radius: 2px; }
 .window-row input[type="range"]::-moz-range-track { height: 4px; background: var(--rule); border-radius: 2px; }
+
+
 
 .stat-strip {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));

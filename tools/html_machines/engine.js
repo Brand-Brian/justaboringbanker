@@ -76,7 +76,13 @@ const JBB = (() => {
       ctx.beginPath(); ctx.moveTo(P.l, h - P.b); ctx.lineTo(w - P.r, h - P.b); ctx.stroke();
       ctx.fillStyle = "#3d4f47"; ctx.font = "12px 'IBM Plex Sans', sans-serif";
       const step = Math.ceil(ys.length / Math.max(3, Math.floor(w / 90)));
-      ys.forEach((y, i) => { if (i % step === 0) ctx.fillText(y, X(i) - 14, h - 8); });
+      ys.forEach((y, i) => {
+        if (i % step !== 0) return;
+        const label = String(y), tw = ctx.measureText(label).width;
+        // centre under the tick, but never let the first/last label run off the canvas
+        const x = Math.min(Math.max(X(i) - tw / 2, 2), w - tw - 2);
+        ctx.fillText(label, x, h - 8);
+      });
 
       // series
       state.series.forEach(s => {
@@ -108,6 +114,11 @@ const JBB = (() => {
       state.hoverX = e.offsetX; draw();
     });
     canvas.addEventListener("pointerleave", () => { state.hoverX = null; draw(); });
+    canvas.addEventListener("pointercancel", () => { state.hoverX = null; draw(); });
+    // touch has no "leave": clear the readout when the next tap lands off the chart
+    document.addEventListener("pointerdown", e => {
+      if (state.hoverX !== null && !canvas.contains(e.target)) { state.hoverX = null; draw(); }
+    }, true);
     window.addEventListener("resize", draw);
 
     return {
