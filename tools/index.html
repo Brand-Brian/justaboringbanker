@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Machines — Just a Boring Banker</title>
+  <meta name="description" content="Interactive calculators that show you what your money decisions actually do — hindsight, withdrawals, allocation, and the cost of emotional decisions.">
+  <link rel="canonical" href="https://justaboringbanker.com/tools/">
+  <link rel="icon" href="/assets/icons/alex-placeholder.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap nav">
+    <a class="brand" href="/">
+      <img src="/assets/icons/alex-placeholder.svg" alt="" width="34" height="34">
+      Just a Boring Banker
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/about.html">About Ryan</a></li>
+      <li><a href="/series/">The Series</a></li>
+      <li><a href="/tools/" aria-current="page">The Machines</a></li>
+      <li><a class="btn btn-primary" href="https://www.youtube.com/@JustABoringBanker">Subscribe on YouTube</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <span class="kicker">The Machines</span>
+      <h1>See it, don't just <span class="annotate">hear it.<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M4 12 Q60 6 100 11 T196 10"/></svg></span></h1>
+      <p class="lede">Every machine lets you pull a lever and watch what happens to real numbers. Nothing is stored, nothing is tracked — they run in your browser.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="machines-list">
+    <div class="wrap">
+      <h2 id="machines-list">Pick a machine</h2>
+      <!-- NOTE: links point at the live site until Ryan's calculator HTML files are copied
+           into /tools/html_machines/. Then switch to relative paths. See docs/ROADMAP.md -->
+      <div class="machine-grid">
+        <a class="machine" href="https://justaboringbanker.com/tools/html_machines/The_Hindsight_Machine.html">
+          <span class="dial">H</span>
+          <h3>The Hindsight Machine</h3>
+          <p>What your money would have done if you'd invested it — and left it alone. Regret, quantified.</p>
+          <span class="try">Run it</span>
+        </a>
+        <a class="machine" href="https://justaboringbanker.com/tools/html_machines/Withdrawal_Scenarios.html">
+          <span class="dial">W</span>
+          <h3>Withdrawal Scenarios</h3>
+          <p>How long the money lasts under different withdrawal rates, returns, and bad-luck timing.</p>
+          <span class="try">Run it</span>
+        </a>
+        <a class="machine" href="https://justaboringbanker.com/tools/html_machines/Allocation_in_Action.html">
+          <span class="dial">A</span>
+          <h3>Allocation in Action</h3>
+          <p>What your stock/bond mix actually does across good years and bad ones.</p>
+          <span class="try">Run it</span>
+        </a>
+        <a class="machine" href="https://justaboringbanker.com/tools/html_machines/action_versus_consequences.html">
+          <span class="dial">C</span>
+          <h3>Actions vs Consequences</h3>
+          <p>The real cost of emotional decisions — panic-selling, market timing, and hot tips from your brother-in-law.</p>
+          <span class="try">Run it</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="series-band" aria-labelledby="series-cta">
+    <div class="wrap">
+      <h2 id="series-cta">The machines have a show</h2>
+      <p class="lede">Each machine gets its own episode. Subscribe and watch them driven properly.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="https://www.youtube.com/@JustABoringBanker">Subscribe on YouTube</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <p>© 2026 Just a Boring Banker · Ryan Garneau</p>
+      <ul class="footer-links">
+        <li><a href="https://www.youtube.com/@JustABoringBanker">YouTube</a></li>
+        <li><a href="https://x.com/johsapb">X</a></li>
+        <li><a href="https://www.facebook.com/justaboring">Facebook</a></li>
+        <li><a href="/about.html">About</a></li>
+      </ul>
+    </div>
+    <p class="disclaimer">Everything here is educational content, not financial advice. I don't know your situation, and no calculator does either. Talk to a licensed professional before making financial decisions.</p>
+  </div>
+</footer>
+
+<script src="/assets/js/main.js"></script>
+</body>
+</html>
