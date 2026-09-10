@@ -87,7 +87,7 @@ SHELL = """<!doctype html>
 </html>
 """
 
-GUIDE_BODY = """  <section class="hero" style="padding-block: clamp(56px,8vw,88px) 0">
+GUIDE_BODY = """  <section class="hero deco" style="padding-block: clamp(56px,8vw,88px) 0">
     <div class="wrap">
       <span class="kicker">Resources · {read_min}-minute read</span>
       <h1>{h1}</h1>
@@ -307,7 +307,7 @@ def hub_card(fname, g):
           <span class="try">Read it</span>
         </a>"""
 
-HUB_BODY = """  <section class="hero" style="padding-block: clamp(56px,8vw,88px) 0">
+HUB_BODY = """  <section class="hero deco" style="padding-block: clamp(56px,8vw,88px) 0">
     <div class="wrap">
       <span class="kicker">Resources</span>
       <h1>The boring library</h1>

@@ -48,3 +48,9 @@ One moment: hero fades up on load. Nothing else animates uninvited.
 Gradient washes as decoration · identical rounded cards for everything ·
 all-caps eyebrow labels · scroll-triggered animation on every section ·
 "→" appended to links · stock finance photography (charts going up, handshakes)
+
+## Update (Sept 10) — pop layer, Bill Nye-inspired
+- Page background carries faint ledger ruling (36px rhythm, 5% green ink) — statement-paper texture.
+- Alex's rounded square is the brand shape: `.deco` sections get one large + one small mint-gradient squircle, 10–14% opacity. Heroes only; don't scatter.
+- Statement band (`.statement`): one big Fraunces declaration per page max, key phrase in mint gradient text. Homepage: "It's not magic. It's compound interest."
+- Nav YouTube CTA is black (ink) with the real red/white YouTube mark; in-page primary buttons stay Alex-mint.

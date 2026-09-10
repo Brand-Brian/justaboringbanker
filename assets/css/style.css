@@ -36,6 +36,8 @@ body {
   line-height: 1.65;
   color: var(--ink);
   background: var(--paper);
+  background-image: repeating-linear-gradient(
+    to bottom, transparent 0 35px, rgba(29, 77, 59, 0.055) 35px 36px);
   -webkit-font-smoothing: antialiased;
 }
 img, svg { max-width: 100%; height: auto; display: block; }
@@ -250,9 +252,9 @@ section + section { border-top: 1px solid var(--rule); }
 .footer-links a { color: var(--ink-soft); }
 .disclaimer { margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--rule); max-width: none; }
 
-/* Nav CTA: ensure button colors out-rank nav link color */
-.nav-links a.btn-primary { color: var(--ink); }
-.nav-links a.btn-primary:hover { color: var(--ink); }
+/* Nav CTA: black button, red/white YouTube mark */
+.nav-links a.btn-primary { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.nav-links a.btn-primary:hover { background: #000; border-color: #000; color: var(--paper); }
 .btn .yt-icon { width: 20px; height: 20px; flex: none; }
 
 /* About page */
@@ -272,3 +274,32 @@ section + section { border-top: 1px solid var(--rule); }
 .footer-map { display: flex; flex-wrap: wrap; gap: 20px 64px; margin-top: 28px; }
 .footer-col { flex-direction: column; gap: 8px; align-items: flex-start; }
 .footer-col strong { color: var(--ink); }
+
+
+/* Alex-shape decoration: the mascot's rounded square as background geometry */
+.deco { position: relative; overflow: clip; }
+.deco > .wrap { position: relative; z-index: 1; }
+.deco::before, .deco::after {
+  content: ""; position: absolute; z-index: 0; border-radius: 26%;
+  background: linear-gradient(135deg, var(--mint-1), var(--mint-2));
+}
+.deco::before {
+  width: clamp(220px, 30vw, 380px); height: clamp(220px, 30vw, 380px);
+  right: max(-90px, -8vw); top: -70px; transform: rotate(14deg); opacity: 0.14;
+}
+.deco::after {
+  width: clamp(110px, 15vw, 180px); height: clamp(110px, 15vw, 180px);
+  left: -55px; bottom: -45px; transform: rotate(-10deg); opacity: 0.10;
+}
+
+/* Statement band — the "It's not magic" moment */
+.statement { padding-block: clamp(52px, 7vw, 88px); }
+.statement p {
+  font: 600 clamp(1.7rem, 4.4vw, 3rem)/1.2 var(--font-display);
+  letter-spacing: -0.01em; margin: 0; max-width: 20ch;
+}
+.statement .mint {
+  background: linear-gradient(120deg, var(--mint-2), #1f8a5c);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.statement .sub { font: 400 1.05rem var(--font-body); color: var(--ink-soft); margin-top: 14px; max-width: 52ch; }
