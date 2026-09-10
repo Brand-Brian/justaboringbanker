@@ -430,6 +430,130 @@ JBB.rangeWindow($("win-lo"), $("win-hi"), $("win-label"), newGame).fire();
 ["start","monthly"].forEach(id => $(id).addEventListener("input", newGame));"""
 )
 
+
+# ---------------------------------------------------------------- Fee Machine
+PAGES["The_Fee_Machine.html"] = dict(
+    title="The Fee Machine",
+    desc="The same portfolio, the same markets, two different fees. Watch what a 2% MER quietly takes over decades.",
+    lede="Fees are the only part of investing that's guaranteed. This machine runs the same money through the same markets twice — once at index-fund fees, once at typical Canadian mutual-fund fees — and shows you the bill.",
+    controls="""        <div class="panel">
+          <h2>Starting amounts</h2>
+          <div class="field"><label for="start">Starting investment ($)</label>
+            <input type="number" id="start" value="25000" min="0" step="500"></div>
+          <div class="field"><label for="monthly">Monthly contribution ($)</label>
+            <input type="number" id="monthly" value="500" min="0" step="25"></div>
+        </div>
+        <div class="panel">
+          <h2>The two fees</h2>
+          <div class="field"><label for="fee-low">Low fee (% per year)</label>
+            <input type="number" id="fee-low" value="0.2" min="0" max="5" step="0.05"></div>
+          <div class="field"><label for="fee-high">High fee (% per year)</label>
+            <input type="number" id="fee-high" value="2.0" min="0" max="5" step="0.05"></div>
+          <p class="fine" style="margin:6px 0 0">Typical Canadian bank mutual funds sit near 2%; broad index funds near 0.2% or less.</p>
+        </div>""",
+    stats=stat("v-low", "Low-fee portfolio") + stat("v-high", "High-fee portfolio") + stat("v-cost", "Cost of the fee gap") + stat("v-inv", "Invested"),
+    explainer="""      <h2>What this machine teaches</h2>
+      <p>Both lines hold the exact same investments through the exact same years. The only difference is the skim. Fees compound with the same machinery as returns — they just compound against you, silently, deducted before your statement is printed. Find your own funds' MERs, plug them in, and meet your co-owner. Then read <a href="/resources/fee-check.html">the Fee Check</a> for what to do about it.</p>""",
+    script="""const $ = id => document.getElementById(id);
+const ch = JBB.chart($("chart"), $("tooltip"));
+const MIN = JBB.minYear(), MAX = JBB.maxYear();
+["win-lo","win-hi"].forEach(id => { $(id).min = MIN; $(id).max = MAX; });
+$("win-lo").value = 2000; $("win-hi").value = MAX;
+
+function run() {
+  const lo = +$("win-lo").value, hi = +$("win-hi").value;
+  const start = +$("start").value || 0, monthly = +$("monthly").value || 0;
+  const feeL = Math.max(0, +$("fee-low").value || 0), feeH = Math.max(0, +$("fee-high").value || 0);
+  const low  = JBB.simulate({ fromY: lo, toY: hi, start, monthly, profile: { eq: 1, bd: 0 }, fee: feeL });
+  const high = JBB.simulate({ fromY: lo, toY: hi, start, monthly, profile: { eq: 1, bd: 0 }, fee: feeH });
+  ch.set([
+    { name: "Low fee (" + feeL + "%)", data: low.value, color: "#1d4d3b", width: 3 },
+    { name: "High fee (" + feeH + "%)", data: high.value, color: "#b4432f", width: 2.5 },
+    { name: "Invested", data: low.invested, color: "#3d4f47", width: 1.5, dash: [5,5] }
+  ], low.years, false);
+  const i = low.value.length - 1;
+  $("v-low").textContent  = JBB.fmt(low.value[i]);
+  $("v-high").textContent = JBB.fmt(high.value[i]);
+  $("v-cost").textContent = JBB.fmt(low.value[i] - high.value[i]);
+  document.getElementById("stat-v-cost").classList.add("bad");
+  $("v-inv").textContent  = JBB.fmt(low.invested[i]);
+}
+JBB.rangeWindow($("win-lo"), $("win-hi"), $("win-label"), run).fire();
+["start","monthly","fee-low","fee-high"].forEach(id => $(id).addEventListener("input", run));"""
+)
+
+# ---------------------------------------------------------------- Debt Machine
+PAGES["The_Debt_Machine.html"] = dict(
+    title="The Debt Machine",
+    desc="Race the avalanche against the snowball on your real debts. See which pays off faster and how much interest each costs.",
+    lede="Two proven ways to kill debt: highest rate first, or smallest balance first. Enter your debts and one total monthly payment, then watch both strategies race your balances to zero.",
+    controls="""        <div class="panel">
+          <h2>Your debts</h2>
+          <div class="field"><label for="b1">Debt 1 — balance ($) &amp; rate (%)</label>
+            <input type="number" id="b1" value="6500" min="0" step="100" aria-label="Debt 1 balance">
+            <input type="number" id="r1" value="21" min="0" max="60" step="0.1" style="margin-top:8px" aria-label="Debt 1 interest rate"></div>
+          <div class="field"><label for="b2">Debt 2 — balance ($) &amp; rate (%)</label>
+            <input type="number" id="b2" value="14000" min="0" step="100" aria-label="Debt 2 balance">
+            <input type="number" id="r2" value="8" min="0" max="60" step="0.1" style="margin-top:8px" aria-label="Debt 2 interest rate"></div>
+          <div class="field"><label for="b3">Debt 3 — balance ($) &amp; rate (%)</label>
+            <input type="number" id="b3" value="3000" min="0" step="100" aria-label="Debt 3 balance">
+            <input type="number" id="r3" value="12" min="0" max="60" step="0.1" style="margin-top:8px" aria-label="Debt 3 interest rate"></div>
+        </div>
+        <div class="panel">
+          <h2>Your firepower</h2>
+          <div class="field"><label for="pay">Total monthly payment ($)</label>
+            <input type="number" id="pay" value="800" min="0" step="25"></div>
+          <p class="fine" style="margin:6px 0 0">Everything you can put at all debts combined, each month.</p>
+        </div>""",
+    stats=stat("v-av", "Avalanche: debt-free in") + stat("v-avint", "Avalanche interest") + stat("v-sn", "Snowball: debt-free in") + stat("v-snint", "Snowball interest") + stat("v-save", "Avalanche saves"),
+    explainer="""      <h2>What this machine teaches</h2>
+      <p>The avalanche (highest rate first) almost always wins on interest — the gap between the two strategies is the price of the snowball's psychology. Sometimes that price is tiny, and the quick wins are worth it; sometimes it's thousands. This machine tells you which situation you're in, so you can choose with your eyes open. The chart's horizontal axis counts months from today. Full playbook: <a href="/resources/debt-payoff-playbook.html">the Debt Payoff Playbook</a>.</p>""",
+    script="""const $ = id => document.getElementById(id);
+document.querySelector(".window-row").style.display = "none";
+const ch = JBB.chart($("chart"), $("tooltip"));
+
+function payoff(debts, budget, mode) {
+  debts = debts.map(d => ({ ...d })).filter(d => d.bal > 0);
+  let months = 0, interest = 0; const totals = [debts.reduce((a,d)=>a+d.bal,0)];
+  while (debts.some(d => d.bal > 0.005) && months < 600) {
+    months++;
+    debts.forEach(d => { const i = d.bal * d.rate / 1200; d.bal += i; interest += i; });
+    const order = [...debts].sort((a,b) => mode === "av" ? b.rate - a.rate : a.bal - b.bal);
+    let left = budget;
+    for (const d of order) { const p = Math.min(d.bal, left); d.bal -= p; left -= p; if (left <= 0) break; }
+    totals.push(debts.reduce((a,d)=>a+d.bal,0));
+  }
+  return { months, interest, totals, done: months < 600 };
+}
+function label(m, done) {
+  if (!done) return "600+ months";
+  const y = Math.floor(m/12), r = m%12;
+  return (y ? y + "y " : "") + r + "m";
+}
+function run() {
+  const debts = [1,2,3].map(n => ({ bal: +$("b"+n).value || 0, rate: +$("r"+n).value || 0 }));
+  const budget = +$("pay").value || 0;
+  const av = payoff(debts, budget, "av"), sn = payoff(debts, budget, "sn");
+  const n = Math.max(av.totals.length, sn.totals.length);
+  const pad = (t) => t.concat(Array(n - t.length).fill(0));
+  ch.set([
+    { name: "Avalanche", data: pad(av.totals), color: "#1d4d3b", width: 3 },
+    { name: "Snowball",  data: pad(sn.totals), color: "#2fa872", width: 2.5, dash: [6,4] }
+  ], Array.from({length: n}, (_, i) => i), false);
+  const monthlyInterest = debts.reduce((a,d) => a + d.bal * d.rate / 1200, 0);
+  const tooLow = budget <= monthlyInterest && debts.some(d => d.bal > 0);
+  $("v-av").textContent = tooLow ? "Never — payment too low" : label(av.months, av.done);
+  $("v-avint").textContent = JBB.fmt(av.interest);
+  $("v-sn").textContent = tooLow ? "Never — payment too low" : label(sn.months, sn.done);
+  $("v-snint").textContent = JBB.fmt(sn.interest);
+  $("v-save").textContent = JBB.fmt(Math.max(0, sn.interest - av.interest));
+  document.getElementById("stat-v-save").classList.add("good");
+}
+["b1","r1","b2","r2","b3","r3","pay"].forEach(id => $(id).addEventListener("input", run));
+run();"""
+)
+
+
 for fname, cfg in PAGES.items():
     html = SHELL.format(fname=fname, **cfg)
     (OUT / fname).write_text(html)

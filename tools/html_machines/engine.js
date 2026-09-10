@@ -24,8 +24,8 @@ const JBB = (() => {
         const w = Math.min(value, withdrawMonthly * 12);
         value -= w; withdrawn += w;
       }
-      const r = profile.gic ? JBB_DATA.gicRate
-        : (profile.eq * row[1] + profile.bd * row[2]);
+      const r = (profile.gic ? JBB_DATA.gicRate
+        : (profile.eq * row[1] + profile.bd * row[2])) - (opts.fee || 0);
       value = Math.max(0, value * (1 + r / 100));
       out.years.push(y); out.value.push(value);
       out.invested.push(invested); out.withdrawn.push(withdrawn);

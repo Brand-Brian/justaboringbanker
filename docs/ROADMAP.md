@@ -12,6 +12,8 @@ _Last updated: 10 Sept 2026 (initial build)_
 - [x] Machines hub (`tools/index.html`)
 - [x] `netlify.toml`, `robots.txt`, `sitemap.xml`, 404 page
 - [x] Boring Brief form wired to Netlify Forms
+- [x] Two new machines (Sept 10): The Fee Machine (MER drag, twin-run comparison) and The Debt Machine (avalanche vs snowball race, budget-based amortization) — grid now 6, balanced
+- [x] Mobile pass: 16px input floor (stops iOS zoom), 44px checkbox tap targets, viewport verified on all 21 pages, every internal link audited and resolving
 - [x] The Toolkit (Sept 10): curated, link-verified official Canadian resources (FCAC/canada.ca calculators, CRA + Service Canada accounts, CIRO AdvisorReport, OBSI, free credit reports, CDIC) — new nav tab
 - [x] Site-wide footer site map: every machine + learn section linked from every page
 - [x] Resources library (Sept 10): hub + 8 Canadian evergreen guides (budget, debt, TFSA/RRSP, FHSA, emergency fund, fees, panic protocol, new investor), all in-brand with checklists; Resources added to nav site-wide

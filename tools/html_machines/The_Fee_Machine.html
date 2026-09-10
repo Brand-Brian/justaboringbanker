@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Fee Machine — Just a Boring Banker</title>
+  <meta name="description" content="The same portfolio, the same markets, two different fees. Watch what a 2% MER quietly takes over decades.">
+  <link rel="canonical" href="https://justaboringbanker.com/tools/html_machines/The_Fee_Machine.html">
+  <link rel="icon" href="/assets/images/favicon.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/tools/html_machines/machines.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap nav">
+    <a class="brand" href="/">
+      <img src="/assets/images/alex.png" alt="" height="34">
+      Just a Boring Banker
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/about.html">Meet the Banker</a></li>
+      <li><a href="/series/">The Series</a></li>
+      <li><a href="/tools/" aria-current="page">The Machines</a></li>
+      <li><a href="/resources/">Resources</a></li>
+      <li><a href="/toolkit/">The Toolkit</a></li>
+      <li><a class="btn btn-primary" href="https://www.youtube.com/@JustABoringBanker"><svg class="yt-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="#F00" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6V8.4L15.8 12l-6.2 3.6z"/></svg>Subscribe on YouTube</a></li>
+    </ul>
+  </div>
+</header>
+
+<main class="machine-page">
+  <div class="wrap">
+    <div class="machine-head">
+      <span class="kicker">The Machines</span>
+      <h1>The Fee Machine</h1>
+      <p class="lede">Fees are the only part of investing that's guaranteed. This machine runs the same money through the same markets twice — once at index-fund fees, once at typical Canadian mutual-fund fees — and shows you the bill.</p>
+    </div>
+
+    <div class="machine-layout">
+      <div class="panel-stack">
+        <div class="panel">
+          <h2>Starting amounts</h2>
+          <div class="field"><label for="start">Starting investment ($)</label>
+            <input type="number" id="start" value="25000" min="0" step="500"></div>
+          <div class="field"><label for="monthly">Monthly contribution ($)</label>
+            <input type="number" id="monthly" value="500" min="0" step="25"></div>
+        </div>
+        <div class="panel">
+          <h2>The two fees</h2>
+          <div class="field"><label for="fee-low">Low fee (% per year)</label>
+            <input type="number" id="fee-low" value="0.2" min="0" max="5" step="0.05"></div>
+          <div class="field"><label for="fee-high">High fee (% per year)</label>
+            <input type="number" id="fee-high" value="2.0" min="0" max="5" step="0.05"></div>
+          <p class="fine" style="margin:6px 0 0">Typical Canadian bank mutual funds sit near 2%; broad index funds near 0.2% or less.</p>
+        </div>
+      </div>
+
+      <div class="panel chart-card">
+        <div class="chart-wrap">
+          <canvas id="chart"></canvas>
+          <div class="tooltip" id="tooltip" hidden></div>
+        </div>
+        <div class="window-row">
+          <span>Window: <strong id="win-label"></strong></span>
+          <span class="ranges">
+            <input type="range" id="win-lo" aria-label="Window start year">
+            <input type="range" id="win-hi" aria-label="Window end year">
+          </span>
+        </div>
+        <div class="stat-strip" id="stats"><div class="stat" id="stat-v-low"><div class="k">Low-fee portfolio</div><div class="v" id="v-low">$0</div></div><div class="stat" id="stat-v-high"><div class="k">High-fee portfolio</div><div class="v" id="v-high">$0</div></div><div class="stat" id="stat-v-cost"><div class="k">Cost of the fee gap</div><div class="v" id="v-cost">$0</div></div><div class="stat" id="stat-v-inv"><div class="k">Invested</div><div class="v" id="v-inv">$0</div></div></div>
+      </div>
+    </div>
+
+    <div class="machine-explainer">
+      <h2>What this machine teaches</h2>
+      <p>Both lines hold the exact same investments through the exact same years. The only difference is the skim. Fees compound with the same machinery as returns — they just compound against you, silently, deducted before your statement is printed. Find your own funds' MERs, plug them in, and meet your co-owner. Then read <a href="/resources/fee-check.html">the Fee Check</a> for what to do about it.</p>
+    </div>
+
+    <p class="data-note">Figures use approximate annual historical total returns (S&amp;P 500 in USD, broad bond proxy, GIC at a flat 4%), in dollars of the day, ignoring fees, taxes, and currency. Built for learning how markets behave, not for planning real money. In Canada, where this grows matters too — TFSA and RRSP room change the after-tax picture; that's a conversation for a licensed professional.</p>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <p>© 2026 Just a Boring Banker · Ryan Garneau</p>
+      <ul class="footer-links">
+        <li><a href="https://www.youtube.com/@JustABoringBanker">YouTube</a></li>
+        <li><a href="https://x.com/johsapb">X</a></li>
+        <li><a href="https://www.facebook.com/justaboring">Facebook</a></li>
+      </ul>
+    </div>
+    <nav class="footer-map" aria-label="Site map">
+      <ul class="footer-links footer-col">
+        <li><strong>The Machines</strong></li>
+        <li><a href="/tools/html_machines/The_Hindsight_Machine.html">The Hindsight Machine</a></li>
+        <li><a href="/tools/html_machines/Withdrawal_Scenarios.html">Withdrawal Scenarios</a></li>
+        <li><a href="/tools/html_machines/Allocation_in_Action.html">Allocation in Action</a></li>
+        <li><a href="/tools/html_machines/action_versus_consequences.html">Actions vs Consequences</a></li>
+      </ul>
+      <ul class="footer-links footer-col">
+        <li><strong>Learn</strong></li>
+        <li><a href="/series/">The Series</a></li>
+        <li><a href="/resources/">Resources</a></li>
+      <li><a href="/toolkit/">The Toolkit</a></li>
+        <li><a href="/toolkit/">The Toolkit</a></li>
+        <li><a href="/about.html">Meet the Banker</a></li>
+      </ul>
+    </nav>
+    <p class="disclaimer">Everything here is educational content, not financial advice. I don't know your situation, and no calculator does either. Talk to a licensed professional before making financial decisions.</p>
+  </div>
+</footer>
+
+<script src="/assets/js/main.js"></script>
+<script src="/tools/html_machines/data.js"></script>
+<script src="/tools/html_machines/engine.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const ch = JBB.chart($("chart"), $("tooltip"));
+const MIN = JBB.minYear(), MAX = JBB.maxYear();
+["win-lo","win-hi"].forEach(id => { $(id).min = MIN; $(id).max = MAX; });
+$("win-lo").value = 2000; $("win-hi").value = MAX;
+
+function run() {
+  const lo = +$("win-lo").value, hi = +$("win-hi").value;
+  const start = +$("start").value || 0, monthly = +$("monthly").value || 0;
+  const feeL = Math.max(0, +$("fee-low").value || 0), feeH = Math.max(0, +$("fee-high").value || 0);
+  const low  = JBB.simulate({ fromY: lo, toY: hi, start, monthly, profile: { eq: 1, bd: 0 }, fee: feeL });
+  const high = JBB.simulate({ fromY: lo, toY: hi, start, monthly, profile: { eq: 1, bd: 0 }, fee: feeH });
+  ch.set([
+    { name: "Low fee (" + feeL + "%)", data: low.value, color: "#1d4d3b", width: 3 },
+    { name: "High fee (" + feeH + "%)", data: high.value, color: "#b4432f", width: 2.5 },
+    { name: "Invested", data: low.invested, color: "#3d4f47", width: 1.5, dash: [5,5] }
+  ], low.years, false);
+  const i = low.value.length - 1;
+  $("v-low").textContent  = JBB.fmt(low.value[i]);
+  $("v-high").textContent = JBB.fmt(high.value[i]);
+  $("v-cost").textContent = JBB.fmt(low.value[i] - high.value[i]);
+  document.getElementById("stat-v-cost").classList.add("bad");
+  $("v-inv").textContent  = JBB.fmt(low.invested[i]);
+}
+JBB.rangeWindow($("win-lo"), $("win-hi"), $("win-label"), run).fire();
+["start","monthly","fee-low","fee-high"].forEach(id => $(id).addEventListener("input", run));
+</script>
+</body>
+</html>
