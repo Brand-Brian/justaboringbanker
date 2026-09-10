@@ -18,8 +18,9 @@ _Last updated: 10 Sept 2026 (initial build)_
 
 ## Blocked on Ryan (before launch)
 
-- [ ] Replace every `[PLACEHOLDER]` in `about.html` with real bio/credentials — EEAT-critical, do not invent
-- [ ] Supply real assets → `assets/icons/` and `assets/images/` (Alex SVG, headshot, banner); placeholder Alex is a stand-in
+- [x] About rebuilt (Sept 10) with real story: 23 years at TD Wealth, Ryan's mission quote, both headshots; nav renamed "Meet the Banker"
+- [ ] Optional from Ryan: professional designations/licences to strengthen EEAT further
+- [ ] Still needed from Ryan: real Alex SVG + banner (headshots are in); placeholder Alex remains in header/favicons
 - [ ] Ryan to sanity-check the rebuilt machines against his originals (logic was rebuilt from behaviour, not copied — his source wasn't retrievable)
 - [ ] Confirm conversion hierarchy: YouTube primary, Boring Brief secondary (working assumption)
 - [ ] Contact email for footer

@@ -37,7 +37,7 @@ SHELL = """<!doctype html>
     </button>
     <ul class="nav-links" id="nav-links">
       <li><a href="/">Home</a></li>
-      <li><a href="/about.html">About Ryan</a></li>
+      <li><a href="/about.html">Meet the Banker</a></li>
       <li><a href="/series/">The Series</a></li>
       <li><a href="/tools/">The Machines</a></li>
       <li><a href="/resources/"{current}>Resources</a></li>

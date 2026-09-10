@@ -251,3 +251,16 @@ section + section { border-top: 1px solid var(--rule); }
 .nav-links a.btn-primary { color: var(--paper); }
 .nav-links a.btn-primary:hover { color: var(--paper); background: var(--vault-deep); }
 .btn .yt-icon { width: 20px; height: 20px; flex: none; }
+
+/* About page */
+.pullquote {
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  padding: 28px 4px; margin: 40px 0;
+  font: 500 clamp(1.25rem, 2.6vw, 1.6rem)/1.45 var(--font-display);
+  color: var(--vault-deep); max-width: 720px;
+}
+.pullquote footer { font: 500 0.95rem var(--font-body); color: var(--ink-soft); margin-top: 14px; }
+.about-hero-img { border-radius: 50%; width: min(300px, 70vw); }
+.side-by-side { display: grid; grid-template-columns: 1fr 220px; gap: 28px; align-items: start; max-width: 820px; }
+.side-by-side img { border-radius: var(--radius); }
+@media (max-width: 640px) { .side-by-side { grid-template-columns: 1fr; } .side-by-side img { width: min(220px, 60vw); } }
