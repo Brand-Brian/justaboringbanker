@@ -12,6 +12,8 @@ _Last updated: 10 Sept 2026 (initial build)_
 - [x] Machines hub (`tools/index.html`)
 - [x] `netlify.toml`, `robots.txt`, `sitemap.xml`, 404 page
 - [x] Boring Brief form wired to Netlify Forms
+- [x] The Toolkit (Sept 10): curated, link-verified official Canadian resources (FCAC/canada.ca calculators, CRA + Service Canada accounts, CIRO AdvisorReport, OBSI, free credit reports, CDIC) — new nav tab
+- [x] Site-wide footer site map: every machine + learn section linked from every page
 - [x] Resources library (Sept 10): hub + 8 Canadian evergreen guides (budget, debt, TFSA/RRSP, FHSA, emergency fund, fees, panic protocol, new investor), all in-brand with checklists; Resources added to nav site-wide
 - [x] CTA fix: nav-button specificity bug (black-on-green) fixed; YouTube icon added to all subscribe CTAs
 - [x] All four machines rebuilt in-brand (Sept 10): shared engine + approx. annual historical data, GIC framing, mobile-friendly, same filenames as original for URL continuity

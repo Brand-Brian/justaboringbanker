@@ -39,6 +39,7 @@ SHELL = """<!doctype html>
       <li><a href="/series/">The Series</a></li>
       <li><a href="/tools/" aria-current="page">The Machines</a></li>
       <li><a href="/resources/">Resources</a></li>
+      <li><a href="/toolkit/">The Toolkit</a></li>
       <li><a class="btn btn-primary" href="https://www.youtube.com/@JustABoringBanker"><svg class="yt-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4L15.8 12l-6.2 3.6z"/></svg>Subscribe on YouTube</a></li>
     </ul>
   </div>
@@ -87,10 +88,27 @@ SHELL = """<!doctype html>
       <p>© 2026 Just a Boring Banker · Ryan Garneau</p>
       <ul class="footer-links">
         <li><a href="https://www.youtube.com/@JustABoringBanker">YouTube</a></li>
-        <li><a href="/tools/">All machines</a></li>
-        <li><a href="/about.html">About</a></li>
+        <li><a href="https://x.com/johsapb">X</a></li>
+        <li><a href="https://www.facebook.com/justaboring">Facebook</a></li>
       </ul>
     </div>
+    <nav class="footer-map" aria-label="Site map">
+      <ul class="footer-links footer-col">
+        <li><strong>The Machines</strong></li>
+        <li><a href="/tools/html_machines/The_Hindsight_Machine.html">The Hindsight Machine</a></li>
+        <li><a href="/tools/html_machines/Withdrawal_Scenarios.html">Withdrawal Scenarios</a></li>
+        <li><a href="/tools/html_machines/Allocation_in_Action.html">Allocation in Action</a></li>
+        <li><a href="/tools/html_machines/action_versus_consequences.html">Actions vs Consequences</a></li>
+      </ul>
+      <ul class="footer-links footer-col">
+        <li><strong>Learn</strong></li>
+        <li><a href="/series/">The Series</a></li>
+        <li><a href="/resources/">Resources</a></li>
+      <li><a href="/toolkit/">The Toolkit</a></li>
+        <li><a href="/toolkit/">The Toolkit</a></li>
+        <li><a href="/about.html">Meet the Banker</a></li>
+      </ul>
+    </nav>
     <p class="disclaimer">Everything here is educational content, not financial advice. I don't know your situation, and no calculator does either. Talk to a licensed professional before making financial decisions.</p>
   </div>
 </footer>

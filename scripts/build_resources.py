@@ -41,6 +41,7 @@ SHELL = """<!doctype html>
       <li><a href="/series/">The Series</a></li>
       <li><a href="/tools/">The Machines</a></li>
       <li><a href="/resources/"{current}>Resources</a></li>
+      <li><a href="/toolkit/">The Toolkit</a></li>
       <li><a class="btn btn-primary" href="https://www.youtube.com/@JustABoringBanker">{yt}Subscribe on YouTube</a></li>
     </ul>
   </div>
@@ -56,12 +57,28 @@ SHELL = """<!doctype html>
       <p>© 2026 Just a Boring Banker · Ryan Garneau</p>
       <ul class="footer-links">
         <li><a href="https://www.youtube.com/@JustABoringBanker">YouTube</a></li>
-        <li><a href="/resources/">All resources</a></li>
-        <li><a href="/tools/">The Machines</a></li>
-        <li><a href="/about.html">About</a></li>
+        <li><a href="https://x.com/johsapb">X</a></li>
+        <li><a href="https://www.facebook.com/justaboring">Facebook</a></li>
       </ul>
     </div>
-    <p class="disclaimer">Everything here is educational content, not financial advice. Rules, limits, and rates change — confirm current figures with the CRA or a licensed professional before making financial decisions.</p>
+    <nav class="footer-map" aria-label="Site map">
+      <ul class="footer-links footer-col">
+        <li><strong>The Machines</strong></li>
+        <li><a href="/tools/html_machines/The_Hindsight_Machine.html">The Hindsight Machine</a></li>
+        <li><a href="/tools/html_machines/Withdrawal_Scenarios.html">Withdrawal Scenarios</a></li>
+        <li><a href="/tools/html_machines/Allocation_in_Action.html">Allocation in Action</a></li>
+        <li><a href="/tools/html_machines/action_versus_consequences.html">Actions vs Consequences</a></li>
+      </ul>
+      <ul class="footer-links footer-col">
+        <li><strong>Learn</strong></li>
+        <li><a href="/series/">The Series</a></li>
+        <li><a href="/resources/">Resources</a></li>
+      <li><a href="/toolkit/">The Toolkit</a></li>
+        <li><a href="/toolkit/">The Toolkit</a></li>
+        <li><a href="/about.html">Meet the Banker</a></li>
+      </ul>
+    </nav>
+    <p class="disclaimer">Everything here is educational content, not financial advice. I don't know your situation, and no calculator does either. Talk to a licensed professional before making financial decisions.</p>
   </div>
 </footer>
 
