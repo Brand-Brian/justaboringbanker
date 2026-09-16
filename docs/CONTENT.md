@@ -27,11 +27,18 @@ Every page has exactly one primary CTA. Don't stack competing asks.
 ### index.html — Home
 Job: explain the premise in 5 seconds, route people to the series or the machines.
 1. Hero — "Boring builds wealth." + Alex + two CTAs (Watch / Try the machines)
-2. Why boring wins — the four pillars as ledger line items
-3. The Machines — four calculator cards (Ryan's existing tools)
+2. The Wealth Building Blocks — four pillars, in order: Understanding, Actions, Protect
+   and Grow, Goals and Legacy (matches Ryan's video framework — keep the naming and order
+   exact if this section changes again)
+3. The Machines — six calculator cards
 4. The series — teaser + YouTube subscribe
 5. The Boring Brief — email capture
 6. Footer — disclaimer, socials, contact
+
+Site positioning is global, not Canada-only (confirmed by Ryan Sept 16): default to
+tax-free / tax-deferred account language (TFSA/Roth IRA, RRSP/IRA/401(k)) rather than
+Canadian terms alone. Ryan's own examples and career are Canadian — that's fine — but
+the site's framing shouldn't read as Canada-exclusive.
 
 ### about.html — About Ryan
 The EEAT workhorse. Real headshot, real bio, credentials list, "why boring"
@@ -43,14 +50,27 @@ Hub for the YouTube series in development. Channel embed/link, episode cards
 once live.
 
 ### tools/index.html — The Machines
-Hub listing the four calculators with one-line descriptions of what each teaches:
+Hub listing six calculators with one-line descriptions of what each teaches:
 - The Hindsight Machine — what your money would have done
 - Withdrawal Scenarios — how long the money lasts
 - Allocation in Action — what your mix actually does
 - Actions vs Consequences — the cost of emotional decisions
+- The Fee Machine — MER drag over time
+- The Debt Machine — avalanche vs snowball
 
-Calculator HTML files are Ryan's existing work — copy them into `/tools/` from the
-current site, restyle the shell only, audit each at 360px width.
+The first four were rebuilt in-brand from behaviour (Ryan's original source wasn't
+retrievable at the time). Ryan has since sent the real HTML for those four — restyle
+the shell only, keep his Plotly/noUiSlider logic as-is — but the data files those
+files depend on (`allocation_data.js`, `hindsight_data.json`) are still missing; see
+`docs/ROADMAP.md`. On every game with Buy/Sell, the timeline's "today" handle must
+lock against backdating once a trade is made — don't regress this.
+
+### resources/index.html — The Boring Library
+Order (per Ryan, Sept 16): Budget, Emergency Fund, Panic Protocol, New Investor
+Checklist, Debt Repayment, Tax-Free vs Tax-Deferred, Saving for a Home, Children's
+Education, Fee Check. FHSA/RESP guides are Canada-rooted (accurate — Ryan's real
+expertise) but name each country's closest equivalent (US state first-home programs,
+529 Plans) rather than presenting as Canada-only.
 
 ## Content Ryan must supply (blocking)
 

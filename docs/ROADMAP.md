@@ -1,6 +1,6 @@
 # ROADMAP.md — Status and next steps
 
-_Last updated: 10 Sept 2026 (initial build)_
+_Last updated: 16 Sept 2026_
 
 ## Done
 
@@ -23,18 +23,18 @@ _Last updated: 10 Sept 2026 (initial build)_
 
 ## Blocked on Ryan (before launch)
 
-- [x] About rebuilt (Sept 10) with real story: 23 years at TD Wealth, Ryan's mission quote, both headshots; nav renamed "Meet the Banker"
+- [x] About rebuilt (Sept 10) with real story, updated Sept 16 to drop TD Wealth naming; nav renamed "Meet the Banker"
 - [ ] Optional from Ryan: professional designations/licences to strengthen EEAT further
 - [x] Real Alex in header + favicon (extracted from original banner, Sept 10); homepage hero now Ryan's portrait
 - [ ] Nice-to-have from Ryan: high-res/vector Alex for large-size use (current extraction is 100px — fine at header size, too soft for heroes)
-- [ ] Ryan to sanity-check the rebuilt machines against his originals (logic was rebuilt from behaviour, not copied — his source wasn't retrievable)
+- [ ] **Blocking, new (Sept 16):** Ryan sent his real four calculators (`html_machines.zip` — Plotly + noUiSlider, real S&P 500 data), but the zip only had the HTML shells. `Allocation_in_Action.html`, `Withdrawal_Scenarios.html`, and `action_versus_consequences.html` all load a missing `allocation_data.js`; `The_Hindsight_Machine.html` fetches a missing `hindsight_data.json`. **Need both files from Ryan** before the real calculators can replace the in-brand rebuilds. Once received: wrap in site header/footer + brand CSS variables, keep his logic verbatim per CLAUDE.md rule 5.
 - [ ] Confirm conversion hierarchy: YouTube primary, Boring Brief secondary (working assumption)
 - [ ] Contact email for footer
 
 ## Next build phases
 
-1. ~~Calculator restyle~~ — done; next: consider monthly-granularity data + TSX index option
-2. **Episode rollout** — real episode cards + VideoObject schema as videos ship
+1. Swap in Ryan's real calculators once `allocation_data.js` + `hindsight_data.json` arrive; consider weekly-granularity data at that point too (Ryan wants more chart detail than the current annual series gives)
+2. **Episode rollout** — real episode cards + VideoObject schema as videos ship (now: Wealth Building Blocks / Forward Looking Cash Flow / Taxes in Plain Language / Debt Repayment)
 3. **Privacy policy page** — required before adding analytics
 4. **Article template** — author byline + schema, for future written content
 5. **Lighthouse pass** — target 95+ across the board before announcing
@@ -44,3 +44,15 @@ _Last updated: 10 Sept 2026 (initial build)_
 - Static HTML, no framework — keeps Ryan's calculators portable, zero build step
 - Fraunces + IBM Plex Sans — ledger-with-a-wink, both free
 - Newsletter named "The Boring Brief" — on-brand, confirm with Ryan
+- **Sept 16 — Ryan's full feedback pass incorporated:** homepage pillars rewritten as the
+  Wealth Building Blocks (Understanding / Actions / Protect and Grow / Goals and Legacy);
+  About page drops "TD Wealth" for generic framing, adds BCIT teaching + speaking-tour
+  ambition, drops fee-focused/industry-bashing tone; Series "what's coming" now matches
+  Ryan's real upcoming episodes; site repositioned as global rather than Canada-only
+  (tax-free/tax-deferred framing site-wide); Resources reordered per Ryan (Budget,
+  Emergency Fund, Panic Protocol, New Investor Checklist, Debt Repayment, Tax-Free vs
+  Tax-Deferred, Saving for a Home, Children's Education, Fee Check); Fee Check trims the
+  "what 2% costs" math section; Boring Budget rewritten around Forward Looking Cash Flow
+  (timing-based expense mapping, pay-period drift example, buffer amount) instead of
+  50/30/20; timeline slider on Allocation in Action / Actions vs Consequences now locks
+  against backdating once a trade is made.

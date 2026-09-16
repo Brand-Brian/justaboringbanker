@@ -147,6 +147,7 @@ function newGame() {
   const start = +$("start").value || 0;
   g = { lo, hi, y: lo, blind, invested: true, value: start, cash: 0, netIn: start,
         monthly: +$("monthly").value || 0, you: [], years: [] };
+  $("win-hi").min = MIN;
   $("buy").disabled = true; $("sell").disabled = false;
   $("status").textContent = "INVESTED"; $("status").classList.remove("out");
   draw();
@@ -183,10 +184,12 @@ function draw() {
 }
 $("sell").addEventListener("click", () => { g.cash += g.value; g.value = 0; g.invested = false;
   $("sell").disabled = true; $("buy").disabled = false;
-  $("status").textContent = "IN CASH"; $("status").classList.add("out"); });
+  $("status").textContent = "IN CASH"; $("status").classList.add("out");
+  $("win-hi").min = Math.max(+$("win-hi").min || MIN, g.y - 1); });
 $("buy").addEventListener("click", () => { g.value += g.cash; g.cash = 0; g.invested = true;
   $("buy").disabled = true; $("sell").disabled = false;
-  $("status").textContent = "INVESTED"; $("status").classList.remove("out"); });
+  $("status").textContent = "INVESTED"; $("status").classList.remove("out");
+  $("win-hi").min = Math.max(+$("win-hi").min || MIN, g.y - 1); });
 $("step").addEventListener("click", stepYear);
 $("reset").addEventListener("click", newGame);
 let lastLo = null;
