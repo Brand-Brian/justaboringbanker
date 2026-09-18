@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Allocation in Action — Just a Boring Banker</title>
+  <meta name="description" content="Pick a portfolio mix, trade against the market through real history, and see if timing beats holding.">
+  <link rel="canonical" href="https://justaboringbanker.com/tools/html_machines/Allocation_in_Action.html">
+  <link rel="icon" href="/assets/images/favicon.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/tools/html_machines/machines.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap nav">
+    <a class="brand" href="/">
+      <img src="/assets/images/alex.png" alt="" height="34">
+      Just a Boring Banker
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/about.html">Meet the Banker</a></li>
+      <li><a href="/series/">The Series</a></li>
+      <li><a href="/tools/" aria-current="page">The Machines</a></li>
+      <li><a href="/resources/">Resources</a></li>
+      <li><a href="/toolkit/">The Toolkit</a></li>
+      <li><a class="btn btn-primary" href="https://www.youtube.com/@JustABoringBanker"><svg class="yt-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="#F00" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6V8.4L15.8 12l-6.2 3.6z"/></svg>Subscribe on YouTube</a></li>
+    </ul>
+  </div>
+</header>
+
+<main class="machine-page">
+  <div class="wrap">
+    <div class="machine-head">
+      <span class="kicker">The Machines</span>
+      <h1>Allocation in Action</h1>
+      <p class="lede">Choose your mix, then try to outsmart it. Sell before the crashes, buy back at the bottoms — if market timing works, this is where you prove it.</p>
+    </div>
+
+    <div class="machine-layout">
+      <div class="panel-stack">
+        <div class="panel">
+          <h2>Starting amounts</h2>
+          <div class="field"><label for="start">Starting investment ($)</label>
+            <input type="number" id="start" value="10000" min="0" step="500"></div>
+          <div class="field"><label for="monthly">Monthly contribution ($)</label>
+            <input type="number" id="monthly" value="250" min="0" step="25"></div>
+        </div>
+        <div class="panel">
+          <h2>Your allocation</h2>
+          <div class="field"><label for="profile">Portfolio mix</label>
+            <select id="profile">
+              <option value="safety">Safety (GIC at 4%)</option>
+              <option value="stable">Stable (100% bonds)</option>
+              <option value="prudent">Prudent (30/70)</option>
+              <option value="measured" selected>Measured (60/40)</option>
+              <option value="bold">Bold (100% stocks)</option>
+            </select></div>
+          <div class="field"><label for="compare">Compare against (hold)</label>
+            <select id="compare">
+              <option value="">— none —</option>
+              <option value="safety">Safety (GIC at 4%)</option>
+              <option value="stable">Stable (100% bonds)</option>
+              <option value="prudent">Prudent (30/70)</option>
+              <option value="measured">Measured (60/40)</option>
+              <option value="bold" selected>Bold (100% stocks)</option>
+            </select></div>
+        </div>
+        <div class="panel">
+          <h2>Trade</h2>
+          <p style="margin:0 0 10px"><span class="status-pill" id="status">INVESTED</span></p>
+          <div class="trade-row">
+            <button class="btn btn-sell" id="sell">Sell</button>
+            <button class="btn btn-buy" id="buy" disabled>Buy</button>
+          </div>
+          <button class="btn btn-primary" id="step" style="width:100%;margin-top:10px">Next year</button>
+          <button class="btn btn-ghost" id="reset" style="width:100%;margin-top:10px">Reset</button>
+          <label class="check" style="margin-top:8px"><input type="checkbox" id="blind"> Blind mode — hidden dates</label>
+          <p class="fine" id="reveal" style="margin:4px 0 0"></p>
+        </div>
+      </div>
+
+      <div class="panel chart-card">
+        <div class="chart-wrap">
+          <canvas id="chart"></canvas>
+          <div class="tooltip" id="tooltip" hidden></div>
+        </div>
+        <div class="window-row">
+          <span>Timeline <strong id="win-label"></strong><br><span class="win-hint">Drag either end — the right handle is "today": pull it left to hide the future, right to reveal it.</span></span>
+          <span class="ranges">
+            <input type="range" id="win-lo" aria-label="Window start year">
+            <input type="range" id="win-hi" aria-label="Window end year">
+          </span>
+        </div>
+        <div class="stat-strip" id="stats"><div class="stat" id="stat-v-you"><div class="k">Your portfolio</div><div class="v" id="v-you">$0</div></div><div class="stat" id="stat-v-hold"><div class="k">Hold strategy</div><div class="v" id="v-hold">$0</div></div><div class="stat" id="stat-v-diff"><div class="k">Outperforming by</div><div class="v" id="v-diff">$0</div></div><div class="stat" id="stat-v-inv"><div class="k">Net invested</div><div class="v" id="v-inv">$0</div></div><div class="stat" id="stat-v-cash"><div class="k">Cash sidelined</div><div class="v" id="v-cash">$0</div></div></div>
+      </div>
+    </div>
+
+    <div class="machine-explainer">
+      <h2>What this machine teaches</h2>
+      <p>Two lessons hide in here. First, allocation: watch how the mixes behave differently through the same years — the bold line falls harder and climbs higher; the stable one barely notices. Second, timing: the hold line never blinks, never mistimes, never sits in cash during the good years. Play a few rounds and count how often you beat it. Then count what it cost you to try. For the honest version, flip on blind mode: a random stretch of real history with the dates hidden — because in real life, nobody tells you which year it is.</p>
+    </div>
+
+    <p class="data-note">Figures use approximate annual historical total returns (S&amp;P 500 in USD, broad bond proxy, GIC at a flat 4%), in dollars of the day, ignoring fees, taxes, and currency. Built for learning how markets behave, not for planning real money. In Canada, where this grows matters too — TFSA and RRSP room change the after-tax picture; that's a conversation for a licensed professional.</p>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <p>© 2026 Just a Boring Banker · Ryan Garneau</p>
+      <ul class="footer-links">
+        <li><a href="https://www.youtube.com/@JustABoringBanker">YouTube</a></li>
+        <li><a href="https://x.com/johsapb">X</a></li>
+        <li><a href="https://www.facebook.com/justaboring">Facebook</a></li>
+      </ul>
+    </div>
+    <nav class="footer-map" aria-label="Site map">
+      <ul class="footer-links footer-col">
+        <li><strong>The Machines</strong></li>
+        <li><a href="/tools/html_machines/The_Hindsight_Machine.html">The Hindsight Machine</a></li>
+        <li><a href="/tools/html_machines/Withdrawal_Scenarios.html">Withdrawal Scenarios</a></li>
+        <li><a href="/tools/html_machines/Allocation_in_Action.html">Allocation in Action</a></li>
+        <li><a href="/tools/html_machines/action_versus_consequences.html">Actions vs Consequences</a></li>
+      </ul>
+      <ul class="footer-links footer-col">
+        <li><strong>Learn</strong></li>
+        <li><a href="/series/">The Series</a></li>
+        <li><a href="/resources/">Resources</a></li>
+      <li><a href="/toolkit/">The Toolkit</a></li>
+        <li><a href="/toolkit/">The Toolkit</a></li>
+        <li><a href="/about.html">Meet the Banker</a></li>
+      </ul>
+    </nav>
+    <p class="disclaimer">Everything here is educational content, not financial advice. I don't know your situation, and no calculator does either. Talk to a licensed professional before making financial decisions.</p>
+  </div>
+</footer>
+
+<script src="/assets/js/main.js"></script>
+<script src="/tools/html_machines/data.js"></script>
+<script src="/tools/html_machines/engine.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const ch = JBB.chart($("chart"), $("tooltip"));
+const MIN = JBB.minYear(), MAX = JBB.maxYear();
+["win-lo","win-hi"].forEach(id => { $(id).min = MIN; $(id).max = MAX; });
+$("win-lo").value = 2000; $("win-hi").value = MAX;
+
+let g = null; // game state
+function newGame() {
+  const blind = $("blind").checked;
+  let lo = +$("win-lo").value, hi = +$("win-hi").value;
+  if (blind) {
+    const len = Math.max(10, hi - lo);
+    lo = MIN + Math.floor(Math.random() * Math.max(1, (MAX - len) - MIN + 1));
+    hi = lo + len;
+  }
+  $("reveal").textContent = blind ? "Dates hidden. Good luck out there." : "";
+  const start = +$("start").value || 0, monthly = +$("monthly").value || 0;
+  g = { lo, hi, y: lo, blind, invested: true, value: start, cash: 0, netIn: start, monthly,
+        you: [], years: [], profile: JBB_DATA.profiles[$("profile").value] };
+  $("win-hi").min = MIN;
+  $("buy").disabled = true; $("sell").disabled = false;
+  $("status").textContent = "INVESTED"; $("status").classList.remove("out");
+  draw();
+}
+function ret(profile, y) {
+  const row = JBB_DATA.years[JBB.yearIndex(y)];
+  return profile.gic ? JBB_DATA.gicRate : profile.eq * row[1] + profile.bd * row[2];
+}
+function stepYear() {
+  if (g.y > g.hi) return false;
+  const c = g.monthly * 12; g.netIn += c;
+  if (g.invested) { g.value += c; g.value *= 1 + ret(g.profile, g.y) / 100; }
+  else g.cash += c;
+  g.you.push(g.value + g.cash); g.years.push(g.y); g.y++;
+  draw();
+  const more = g.y <= g.hi;
+  if (!more && g.blind) $("reveal").textContent = "Revealed: you just traded through " + g.lo + "–" + g.hi + ".";
+  return more;
+}
+function draw() {
+  const start = +$("start").value || 0, monthly = +$("monthly").value || 0;
+  const hold = JBB.simulate({ fromY: g.lo, toY: g.hi, start, monthly, profile: g.profile });
+  const n = g.you.length;
+  const series = [
+    { name: "Hold", data: hold.value.slice(0, Math.max(n, 1)), color: "#3d4f47", width: 2, dash: [5,5] },
+    { name: "You",  data: n ? g.you : [start], color: "#1d4d3b", width: 3 }
+  ];
+  const cmp = $("compare").value;
+  if (cmp) {
+    const c = JBB.simulate({ fromY: g.lo, toY: g.hi, start, monthly, profile: JBB_DATA.profiles[cmp] });
+    series.unshift({ name: JBB_DATA.profiles[cmp].label, data: c.value.slice(0, Math.max(n, 1)), color: "#2fa872", width: 1.5, dash: [2,4] });
+  }
+  const labels = g.blind ? (n ? g.years.map((_, i) => "Y" + (i + 1)) : ["Y1"]) : (n ? g.years : [g.lo]);
+  ch.set(series, labels, !g.blind);
+  const you = n ? g.you[n-1] : start, hv = n ? hold.value[n-1] : start;
+  $("v-you").textContent = JBB.fmt(you);
+  $("v-hold").textContent = JBB.fmt(hv);
+  $("v-diff").textContent = JBB.fmt(you - hv);
+  $("stat-v-diff").classList.toggle("good", you - hv >= 0);
+  $("stat-v-diff").classList.toggle("bad", you - hv < 0);
+  $("v-inv").textContent = JBB.fmt(g.netIn);
+  $("v-cash").textContent = JBB.fmt(g.cash);
+}
+$("sell").addEventListener("click", () => { g.cash += g.value; g.value = 0; g.invested = false;
+  $("sell").disabled = true; $("buy").disabled = false;
+  $("status").textContent = "IN CASH"; $("status").classList.add("out");
+  $("win-hi").min = Math.max(+$("win-hi").min || MIN, g.y - 1); });
+$("buy").addEventListener("click", () => { g.value += g.cash; g.cash = 0; g.invested = true;
+  $("buy").disabled = true; $("sell").disabled = false;
+  $("status").textContent = "INVESTED"; $("status").classList.remove("out");
+  $("win-hi").min = Math.max(+$("win-hi").min || MIN, g.y - 1); });
+$("step").addEventListener("click", stepYear);
+$("reset").addEventListener("click", newGame);
+let lastLo = null;
+JBB.rangeWindow($("win-lo"), $("win-hi"), $("win-label"), (lo, hi) => {
+  if (g === null || g.blind || lo !== lastLo) { lastLo = lo; newGame(); return; }
+  lastLo = lo;
+  if (g.years.length > (hi - g.lo + 1)) { newGame(); return; } // can't un-live years
+  g.hi = hi;
+  while (g.y <= g.hi) { if (!stepYear()) break; } // scrub forward reveals year by year
+}).fire();
+["start","monthly","profile","compare","blind"].forEach(id => $(id).addEventListener("input", newGame));
+</script>
+</body>
+</html>

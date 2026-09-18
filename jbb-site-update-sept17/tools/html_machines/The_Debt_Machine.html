@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Debt Machine — Just a Boring Banker</title>
+  <meta name="description" content="Race the avalanche against the snowball on your real debts. See which pays off faster and how much interest each costs.">
+  <link rel="canonical" href="https://justaboringbanker.com/tools/html_machines/The_Debt_Machine.html">
+  <link rel="icon" href="/assets/images/favicon.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/tools/html_machines/machines.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap nav">
+    <a class="brand" href="/">
+      <img src="/assets/images/alex.png" alt="" height="34">
+      Just a Boring Banker
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/about.html">Meet the Banker</a></li>
+      <li><a href="/series/">The Series</a></li>
+      <li><a href="/tools/" aria-current="page">The Machines</a></li>
+      <li><a href="/resources/">Resources</a></li>
+      <li><a href="/toolkit/">The Toolkit</a></li>
+      <li><a class="btn btn-primary" href="https://www.youtube.com/@JustABoringBanker"><svg class="yt-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="#F00" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6V8.4L15.8 12l-6.2 3.6z"/></svg>Subscribe on YouTube</a></li>
+    </ul>
+  </div>
+</header>
+
+<main class="machine-page">
+  <div class="wrap">
+    <div class="machine-head">
+      <span class="kicker">The Machines</span>
+      <h1>The Debt Machine</h1>
+      <p class="lede">Two proven ways to kill debt: highest rate first, or smallest balance first. Enter your debts and one total monthly payment, then watch both strategies race your balances to zero.</p>
+    </div>
+
+    <div class="machine-layout">
+      <div class="panel-stack">
+        <div class="panel">
+          <h2>Your debts</h2>
+          <div class="field"><label for="b1">Debt 1 — balance ($) &amp; rate (%)</label>
+            <input type="number" id="b1" value="6500" min="0" step="100" aria-label="Debt 1 balance">
+            <input type="number" id="r1" value="21" min="0" max="60" step="0.1" style="margin-top:8px" aria-label="Debt 1 interest rate"></div>
+          <div class="field"><label for="b2">Debt 2 — balance ($) &amp; rate (%)</label>
+            <input type="number" id="b2" value="14000" min="0" step="100" aria-label="Debt 2 balance">
+            <input type="number" id="r2" value="8" min="0" max="60" step="0.1" style="margin-top:8px" aria-label="Debt 2 interest rate"></div>
+          <div class="field"><label for="b3">Debt 3 — balance ($) &amp; rate (%)</label>
+            <input type="number" id="b3" value="3000" min="0" step="100" aria-label="Debt 3 balance">
+            <input type="number" id="r3" value="12" min="0" max="60" step="0.1" style="margin-top:8px" aria-label="Debt 3 interest rate"></div>
+        </div>
+        <div class="panel">
+          <h2>Your firepower</h2>
+          <div class="field"><label for="pay">Total monthly payment ($)</label>
+            <input type="number" id="pay" value="800" min="0" step="25"></div>
+          <p class="fine" style="margin:6px 0 0">Everything you can put at all debts combined, each month.</p>
+        </div>
+      </div>
+
+      <div class="panel chart-card">
+        <div class="chart-wrap">
+          <canvas id="chart"></canvas>
+          <div class="tooltip" id="tooltip" hidden></div>
+        </div>
+        <div class="window-row">
+          <span>Timeline <strong id="win-label"></strong><br><span class="win-hint">Drag either end — the right handle is "today": pull it left to hide the future, right to reveal it.</span></span>
+          <span class="ranges">
+            <input type="range" id="win-lo" aria-label="Window start year">
+            <input type="range" id="win-hi" aria-label="Window end year">
+          </span>
+        </div>
+        <div class="stat-strip" id="stats"><div class="stat" id="stat-v-av"><div class="k">Avalanche: debt-free in</div><div class="v" id="v-av">$0</div></div><div class="stat" id="stat-v-avint"><div class="k">Avalanche interest</div><div class="v" id="v-avint">$0</div></div><div class="stat" id="stat-v-sn"><div class="k">Snowball: debt-free in</div><div class="v" id="v-sn">$0</div></div><div class="stat" id="stat-v-snint"><div class="k">Snowball interest</div><div class="v" id="v-snint">$0</div></div><div class="stat" id="stat-v-save"><div class="k">Avalanche saves</div><div class="v" id="v-save">$0</div></div></div>
+      </div>
+    </div>
+
+    <div class="machine-explainer">
+      <h2>What this machine teaches</h2>
+      <p>The avalanche (highest rate first) almost always wins on interest — the gap between the two strategies is the price of the snowball's psychology. Sometimes that price is tiny, and the quick wins are worth it; sometimes it's thousands. This machine tells you which situation you're in, so you can choose with your eyes open. The chart's horizontal axis counts months from today. Full playbook: <a href="/resources/debt-payoff-playbook.html">the Debt Payoff Playbook</a>.</p>
+    </div>
+
+    <p class="data-note">Figures use approximate annual historical total returns (S&amp;P 500 in USD, broad bond proxy, GIC at a flat 4%), in dollars of the day, ignoring fees, taxes, and currency. Built for learning how markets behave, not for planning real money. In Canada, where this grows matters too — TFSA and RRSP room change the after-tax picture; that's a conversation for a licensed professional.</p>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <p>© 2026 Just a Boring Banker · Ryan Garneau</p>
+      <ul class="footer-links">
+        <li><a href="https://www.youtube.com/@JustABoringBanker">YouTube</a></li>
+        <li><a href="https://x.com/johsapb">X</a></li>
+        <li><a href="https://www.facebook.com/justaboring">Facebook</a></li>
+      </ul>
+    </div>
+    <nav class="footer-map" aria-label="Site map">
+      <ul class="footer-links footer-col">
+        <li><strong>The Machines</strong></li>
+        <li><a href="/tools/html_machines/The_Hindsight_Machine.html">The Hindsight Machine</a></li>
+        <li><a href="/tools/html_machines/Withdrawal_Scenarios.html">Withdrawal Scenarios</a></li>
+        <li><a href="/tools/html_machines/Allocation_in_Action.html">Allocation in Action</a></li>
+        <li><a href="/tools/html_machines/action_versus_consequences.html">Actions vs Consequences</a></li>
+      </ul>
+      <ul class="footer-links footer-col">
+        <li><strong>Learn</strong></li>
+        <li><a href="/series/">The Series</a></li>
+        <li><a href="/resources/">Resources</a></li>
+      <li><a href="/toolkit/">The Toolkit</a></li>
+        <li><a href="/toolkit/">The Toolkit</a></li>
+        <li><a href="/about.html">Meet the Banker</a></li>
+      </ul>
+    </nav>
+    <p class="disclaimer">Everything here is educational content, not financial advice. I don't know your situation, and no calculator does either. Talk to a licensed professional before making financial decisions.</p>
+  </div>
+</footer>
+
+<script src="/assets/js/main.js"></script>
+<script src="/tools/html_machines/data.js"></script>
+<script src="/tools/html_machines/engine.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+document.querySelector(".window-row").style.display = "none";
+const ch = JBB.chart($("chart"), $("tooltip"));
+
+function payoff(debts, budget, mode) {
+  debts = debts.map(d => ({ ...d })).filter(d => d.bal > 0);
+  let months = 0, interest = 0; const totals = [debts.reduce((a,d)=>a+d.bal,0)];
+  while (debts.some(d => d.bal > 0.005) && months < 600) {
+    months++;
+    debts.forEach(d => { const i = d.bal * d.rate / 1200; d.bal += i; interest += i; });
+    const order = [...debts].sort((a,b) => mode === "av" ? b.rate - a.rate : a.bal - b.bal);
+    let left = budget;
+    for (const d of order) { const p = Math.min(d.bal, left); d.bal -= p; left -= p; if (left <= 0) break; }
+    totals.push(debts.reduce((a,d)=>a+d.bal,0));
+  }
+  return { months, interest, totals, done: months < 600 };
+}
+function label(m, done) {
+  if (!done) return "600+ months";
+  const y = Math.floor(m/12), r = m%12;
+  return (y ? y + "y " : "") + r + "m";
+}
+function run() {
+  const debts = [1,2,3].map(n => ({ bal: +$("b"+n).value || 0, rate: +$("r"+n).value || 0 }));
+  const budget = +$("pay").value || 0;
+  const av = payoff(debts, budget, "av"), sn = payoff(debts, budget, "sn");
+  const n = Math.max(av.totals.length, sn.totals.length);
+  const pad = (t) => t.concat(Array(n - t.length).fill(0));
+  ch.set([
+    { name: "Avalanche", data: pad(av.totals), color: "#1d4d3b", width: 3 },
+    { name: "Snowball",  data: pad(sn.totals), color: "#2fa872", width: 2.5, dash: [6,4] }
+  ], Array.from({length: n}, (_, i) => i), false);
+  const monthlyInterest = debts.reduce((a,d) => a + d.bal * d.rate / 1200, 0);
+  const tooLow = budget <= monthlyInterest && debts.some(d => d.bal > 0);
+  $("v-av").textContent = tooLow ? "Never — payment too low" : label(av.months, av.done);
+  $("v-avint").textContent = JBB.fmt(av.interest);
+  $("v-sn").textContent = tooLow ? "Never — payment too low" : label(sn.months, sn.done);
+  $("v-snint").textContent = JBB.fmt(sn.interest);
+  $("v-save").textContent = JBB.fmt(Math.max(0, sn.interest - av.interest));
+  document.getElementById("stat-v-save").classList.add("good");
+}
+["b1","r1","b2","r2","b3","r3","pay"].forEach(id => $(id).addEventListener("input", run));
+run();
+</script>
+</body>
+</html>
