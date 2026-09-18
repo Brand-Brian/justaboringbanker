@@ -28,7 +28,7 @@
             color: var(--ink);
         }
 
-        .rg-machine .container { display: flex; flex-direction: row; min-height: 100vh; }
+        .rg-machine.container { display: flex; flex-direction: row; min-height: 100vh; }
         
         /* UPDATED: Sidebar now has fixed height, sticks to top, and scrolls internally */
         .rg-machine .sidebar { 
@@ -73,10 +73,10 @@
         .rg-machine .noUi-handle:active { cursor: grabbing; }
 
         @media (max-width: 768px) {
-            .rg-machine .container { flex-direction: column; height: auto; }
+            .rg-machine.container { flex-direction: column; height: auto; }
             /* UPDATED: Reset sidebar scrolling for mobile devices */
             .rg-machine .sidebar { width: 100%; height: auto; position: static; overflow-y: visible; border-right: none; border-bottom: 1px solid var(--jbb-border); }
-            .rg-machine .main-content { width: 100%; box-sizing: border-box; min-height: auto; }
+            .rg-machine .main-content { width: 100%; box-sizing: border-box; min-height: auto; order: -1; }
             .rg-machine .metrics-grid { grid-template-columns: repeat(2, 1fr); }
             .rg-machine #chart-container { min-height: 300px; }
         }

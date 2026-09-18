@@ -28,7 +28,7 @@
             color: var(--ink);
         }
 
-        .rg-machine .container { display: flex; flex-direction: row; min-height: 100vh; }
+        .rg-machine.container { display: flex; flex-direction: row; min-height: 100vh; }
         .rg-machine .sidebar { width: 18%; background-color: var(--jbb-bg); padding: 20px; border-right: 1px solid var(--jbb-border); box-sizing: border-box; }
         .rg-machine .main-content { width: 82%; padding: 20px; display: flex; flex-direction: column; min-height: 100vh; box-sizing: border-box; }
         .rg-machine .step-title { font-weight: bold; font-size: 1.1em; color: var(--jbb-dark); border-bottom: 2px solid var(--jbb-border); padding-bottom: 5px; margin-top: 20px; margin-bottom: 10px; }
@@ -55,9 +55,9 @@
         .rg-machine .noUi-handle:active { cursor: grabbing; }
 
         @media (max-width: 768px) {
-            .rg-machine .container { flex-direction: column; height: auto; }
+            .rg-machine.container { flex-direction: column; height: auto; }
             .rg-machine .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--jbb-border); }
-            .rg-machine .main-content { width: 100%; box-sizing: border-box; min-height: auto; }
+            .rg-machine .main-content { width: 100%; box-sizing: border-box; min-height: auto; order: -1; }
             .rg-machine .metrics-grid { grid-template-columns: repeat(2, 1fr); }
             .rg-machine #chart-container { min-height: 300px; }
         }
