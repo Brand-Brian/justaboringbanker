@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Allocation in Action — Just a Boring Banker</title>
+  <meta name="description" content="What your stock/bond mix actually does across good years and bad ones.">
+  <link rel="canonical" href="https://justaboringbanker.com/tools/html_machines/Allocation_in_Action.html">
+  <link rel="icon" href="/assets/images/favicon.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+  <style>
+        :root {
+            --jbb-green: var(--mint-2);
+            --jbb-red: #FF5252;
+            --jbb-bg: var(--paper-tint);
+            --jbb-dark: var(--ink);
+            --jbb-border: var(--rule);
+        }
+        .rg-machine {
+            font-family: var(--font-body);
+            background: var(--paper);
+            color: var(--ink);
+        }
+
+        .rg-machine .container { display: flex; flex-direction: row; min-height: 100vh; }
+        .rg-machine .sidebar { width: 18%; background-color: var(--jbb-bg); padding: 20px; border-right: 1px solid var(--jbb-border); box-sizing: border-box; }
+        .rg-machine .main-content { width: 82%; padding: 20px; display: flex; flex-direction: column; min-height: 100vh; box-sizing: border-box; }
+        .rg-machine .step-title { font-weight: bold; font-size: 1.1em; color: var(--jbb-dark); border-bottom: 2px solid var(--jbb-border); padding-bottom: 5px; margin-top: 20px; margin-bottom: 10px; }
+        .rg-machine .step-title:first-child { margin-top: 0; }
+        .rg-machine .input-group { margin-bottom: 15px; }
+        .rg-machine .input-group label { display: block; font-size: 0.9em; margin-bottom: 5px; font-weight: bold;}
+        .rg-machine .input-group input, .rg-machine .input-group select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .rg-machine .btn-group { display: flex; gap: 10px; margin-top: 10px; }
+        .rg-machine .btn { flex: 1; padding: 12px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; color: white; transition: 0.2s; }
+        .rg-machine .btn-sell { background-color: var(--jbb-red); }
+        .rg-machine .btn-sell:disabled { background-color: #fca5a5; cursor: not-allowed; }
+        .rg-machine .btn-buy { background-color: var(--jbb-green); }
+        .rg-machine .btn-buy:disabled { background-color: #86efac; cursor: not-allowed; }
+        .rg-machine .btn-reset { background-color: #888; margin-top: 20px; width: 100%; }
+        .rg-machine .metrics-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-top: 15px; }
+        .rg-machine .metric-box { background: #f9f9f9; border: 1px solid var(--jbb-border); border-radius: 6px; padding: 10px; text-align: center; white-space: nowrap; }
+        .rg-machine .metric-label { font-size: 11px; font-weight: bold; color: #666; margin-bottom: 5px; }
+        .rg-machine .metric-value { font-size: 18px; font-weight: bold; }
+        .rg-machine .metric-good { background-color: #f0fdf4; border-color: var(--jbb-green); color: var(--jbb-green); }
+        .rg-machine .metric-bad { background-color: #fef2f2; border-color: var(--jbb-red); color: var(--jbb-red); }
+        .rg-machine #chart-container { width: 100%; flex-grow: 1; min-height: 400px; margin-top: 5px; }
+        .rg-machine .slider-container { margin-top: 15px; padding: 10px; background: var(--jbb-bg); border-radius: 6px;}
+        .rg-machine .slider-label { position: relative; display: flex; justify-content: center; font-weight: bold; font-size: 14px; margin-bottom: 15px; }
+        .rg-machine .slider-label span:first-child { position: absolute; left: 0; }
+        .rg-machine .noUi-connect { background: var(--jbb-green); }
+        .rg-machine .noUi-handle { border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); border: 2px solid var(--jbb-green); cursor: grab; }
+        .rg-machine .noUi-handle:active { cursor: grabbing; }
+
+        @media (max-width: 768px) {
+            .rg-machine .container { flex-direction: column; height: auto; }
+            .rg-machine .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--jbb-border); }
+            .rg-machine .main-content { width: 100%; box-sizing: border-box; min-height: auto; }
+            .rg-machine .metrics-grid { grid-template-columns: repeat(3, 1fr); }
+            .rg-machine #chart-container { min-height: 300px; }
+        }
+
+
+  </style>
+    <script src="allocation_data.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap nav">
+    <a class="brand" href="/">
+      <img src="/assets/images/alex.png" alt="" height="34">
+      Just a Boring Banker
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/about.html">Meet the Banker</a></li>
+      <li><a href="/series/">The Series</a></li>
+      <li><a href="/tools/" aria-current="page">The Machines</a></li>
+      <li><a href="/resources/">Resources</a></li>
+      <li><a href="/toolkit/">The Toolkit</a></li>
+      <li><a class="btn btn-primary" href="https://www.youtube.com/@JustABoringBanker"><svg class="yt-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="#F00" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6V8.4L15.8 12l-6.2 3.6z"/></svg>Subscribe on YouTube</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+
+
+    <div class="container rg-machine">
+        <div class="sidebar">
+            <div class="step-title">Step 2: Starting Amounts</div>
+            <div class="input-group">
+                <label>Starting Investment ($)</label>
+                <input type="number" id="val-start" value="10000" onchange="recalculate()">
+            </div>
+            <div class="input-group">
+                <label>Monthly Contribution ($)</label>
+                <input type="number" id="val-monthly" value="0" onchange="recalculate()">
+            </div>
+
+            <div class="step-title">Step 2.5 Allocation Profiles</div>
+            <div class="input-group">
+                <label>Your Profile (Benchmark)</label>
+                <select id="val-profile" onchange="recalculate()">
+                    <option value="safety">Safety (4% GIC / CD)</option>
+                    <option value="stable">Stable (100% Bond)</option>
+                    <option value="prudent">Prudent (70% Bond, 30% S&P)</option>
+                    <option value="measured">Measured (40% Bond, 60% S&P)</option>
+                    <option value="bold" selected>Bold (100% S&P 500)</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label>Compare Against (Buy & Hold)</label>
+                <select id="val-compare" multiple onchange="recalculate()" style="height: 100px;">
+                    <option value="safety">Safety (4% GIC / CD)</option>
+                    <option value="stable">Stable (100% Bond)</option>
+                    <option value="prudent">Prudent (70% Bond, 30% S&P)</option>
+                    <option value="measured">Measured (40% Bond, 60% S&P)</option>
+                    <option value="bold">Bold (100% S&P 500)</option>
+                </select>
+                <small style="color: #666; font-size: 0.8em; display: block; margin-top: 4px;">Hold Ctrl (or Cmd) to select multiple.</small>
+            </div>
+
+            <div class="step-title">Step 3: Trade</div>
+            <div style="font-size: 1.2em; text-align: center; font-weight: bold; margin: 10px 0;">
+                Current Net Invested: <span id="ui-net-invested">$10,000</span>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-sell" id="btn-sell">SELL</button>
+                <button type="button" class="btn btn-buy" id="btn-buy" disabled>BUY</button>
+            </div>
+
+            <button type="button" class="btn btn-reset" id="btn-reset">Reset Simulation</button>
+
+            <div style="margin-top: 35px; padding: 15px; background-color: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 5px; font-size: 0.85em; color: #333; text-align: left; line-height: 1.4;">
+                <h4 style="margin-top: 0; margin-bottom: 10px; font-size: 1.1em; color: #2c3e50;">Test Your Strategy</h4>
+                <p style="margin-top: 0; margin-bottom: 0;">
+                    Experience investing in the Market, with the ability to have comparable investments to show in real time the impact of the moving market. You can also buy and sell, and test your ability against the market. If market timing works, try it here!
+                </p>
+            </div>
+        </div>
+
+        <div class="main-content">
+            
+            <div style="width: 100%; text-align: left; margin-bottom: 5px;">
+                <h2 style="margin-left: 20px; color: var(--jbb-dark); margin-bottom: 0; margin-top: 5px; font-size: 1.5rem;">Allocation in Action</h2>
+            </div>
+
+            <div id="chart-container"></div>
+            
+            <div class="slider-container">
+                <div class="slider-label">
+                    <span>Navigate Time:</span>
+                    <span id="slider-display-val" style="color: var(--jbb-red);">...</span>
+                </div>
+                <div id="time-slider"></div> 
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-box metric-good"><div class="metric-label">Your Portfolio</div><div class="metric-value" id="m-user">$0</div></div>
+                <div class="metric-box"><div class="metric-label">Hold Strategy</div><div class="metric-value" id="m-hold">$0</div></div>
+                <div class="metric-box" id="m-delta-box"><div class="metric-label" id="m-delta-label">Outperforming</div><div class="metric-value" id="m-delta">$0</div></div>
+                <div class="metric-box"><div class="metric-label">Net Invested</div><div class="metric-value" id="m-invested">$0</div></div>
+                <div class="metric-box" id="m-return-box"><div class="metric-label">Return</div><div class="metric-value" id="m-return">0.00%</div></div>
+                <div class="metric-box"><div class="metric-label">Cash Sidelines</div><div class="metric-value" id="m-cash">$0</div></div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <p>© 2026 Just a Boring Banker · Ryan Garneau</p>
+      <ul class="footer-links">
+        <li><a href="https://www.youtube.com/@JustABoringBanker">YouTube</a></li>
+        <li><a href="https://x.com/johsapb">X</a></li>
+        <li><a href="https://www.facebook.com/justaboring">Facebook</a></li>
+      </ul>
+    </div>
+    <nav class="footer-map" aria-label="Site map">
+      <ul class="footer-links footer-col">
+        <li><strong>The Machines</strong></li>
+        <li><a href="/tools/html_machines/The_Hindsight_Machine.html">The Hindsight Machine</a></li>
+        <li><a href="/tools/html_machines/Withdrawal_Scenarios.html">Withdrawal Scenarios</a></li>
+        <li><a href="/tools/html_machines/Allocation_in_Action.html">Allocation in Action</a></li>
+        <li><a href="/tools/html_machines/action_versus_consequences.html">Actions vs Consequences</a></li>
+        <li><a href="/tools/html_machines/The_Fee_Machine.html">The Fee Machine</a></li>
+        <li><a href="/tools/html_machines/The_Debt_Machine.html">The Debt Machine</a></li>
+      </ul>
+      <ul class="footer-links footer-col">
+        <li><strong>Learn</strong></li>
+        <li><a href="/series/">The Series</a></li>
+        <li><a href="/resources/">Resources</a></li>
+        <li><a href="/toolkit/">The Toolkit</a></li>
+        <li><a href="/about.html">Meet the Banker</a></li>
+      </ul>
+    </nav>
+    <p class="disclaimer">Everything here is educational content, not financial advice. I don't know your situation, and no calculator does either. Talk to a licensed professional before making financial decisions.</p>
+  </div>
+</footer>
+
+<script src="/assets/js/main.js"></script>
+<script>
+    // --- 1. GLOBAL STATE ---
+    let marketData = [];
+    let state = {
+        startIndex: 0,
+        endIndex: 100,
+        transactions: [],
+        isBlind: false // Tracks if the user is flying blind
+    };
+
+    // --- 2. REAL DATA LOADER (HINDSIGHT FORWARD-FILL METHOD) ---
+    function loadRealData() {
+        function cleanNum(val) {
+            if (typeof val === 'string') return parseFloat(val.replace(/[^0-9.-]+/g,""));
+            return parseFloat(val);
+        }
+
+        let bondPricesByMonth = {};
+        for (let i = 0; i < bondData.length; i++) {
+            let rDate = bondData[i]['Date'] || bondData[i]['date'] || Object.values(bondData[i])[0];
+            if (rDate) {
+                let dObj = new Date(rDate);
+                let monthKey = dObj.getFullYear() + "-" + dObj.getMonth();
+                bondPricesByMonth[monthKey] = cleanNum(bondData[i]['Close'] || bondData[i]['Price'] || bondData[i]['Adj Close'] || Object.values(bondData[i])[1]);
+            }
+        }
+
+        let prevSp = null;
+        let prevBond = null;
+        let currentBondPrice = null;
+
+        for (let i = 0; i < sp500Data.length; i++) {
+            let rawDate = sp500Data[i]['Date'] || sp500Data[i]['date'] || Object.values(sp500Data[i])[0];
+            let dObj = new Date(rawDate);
+            let monthKey = dObj.getFullYear() + "-" + dObj.getMonth();
+
+            if (bondPricesByMonth[monthKey] !== undefined) {
+                currentBondPrice = bondPricesByMonth[monthKey];
+            }
+
+            if (currentBondPrice !== null) {
+                let spToday = cleanNum(sp500Data[i]['Close'] || sp500Data[i]['Price'] || sp500Data[i]['Adj Close'] || Object.values(sp500Data[i])[1]);
+
+                if (prevSp !== null && prevBond !== null) {
+                    let spMult = spToday / prevSp;
+                    let bondMult = currentBondPrice / prevBond;
+
+                    marketData.push({
+                        weekIndex: marketData.length,
+                        dateStr: dObj.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+                        rawDate: dObj, // Used for exact month-offset math in blind mode
+                        spMult: isNaN(spMult) ? 1 : spMult, 
+                        bondMult: isNaN(bondMult) ? 1 : bondMult
+                    });
+                }
+                prevSp = spToday;
+                prevBond = currentBondPrice;
+            }
+        }
+        state.endIndex = marketData.length - 1;
+    }
+
+    // --- 3. DUAL SLIDER INITIALIZATION ---
+    function initializeEngine() {
+        let sliderElement = document.getElementById('time-slider');
+        if (!sliderElement) return;
+
+        if (sliderElement.noUiSlider) sliderElement.noUiSlider.destroy();
+
+        noUiSlider.create(sliderElement, {
+            start: [0, marketData.length - 1],
+            connect: true,
+            range: { 'min': 0, 'max': marketData.length - 1 },
+            step: 1
+        });
+
+        // TIME LOCK: Physically block the right handle from dragging backwards past a trade
+        sliderElement.noUiSlider.on('slide', function (values, handle) {
+            let latestTradeWeek = state.transactions.length > 0 ? Math.max(...state.transactions.map(t => t.week)) : -1;
+            
+            if (handle === 1 && parseInt(values[1]) < latestTradeWeek) {
+                sliderElement.noUiSlider.set([null, latestTradeWeek]);
+            }
+        });
+
+        sliderElement.noUiSlider.on('update', function (values) {
+            state.startIndex = parseInt(values[0]);
+            state.endIndex = parseInt(values[1]);
+            recalculate();
+        });
+    }
+
+    // --- 4. MATH ENGINE & BLIND MODE LOGIC ---
+    function recalculate() {
+        if (marketData.length === 0) return;
+
+        let startVal = parseFloat(document.getElementById('val-start')?.value || 10000);
+        let monthlyVal = parseFloat(document.getElementById('val-monthly')?.value || 0);
+
+        let selects = document.querySelectorAll('select');
+        let profileSelect = selects[0];
+        let compareSelect = selects[1];
+
+        let activeProfileName = profileSelect && profileSelect.selectedIndex >= 0 
+            ? profileSelect.options[profileSelect.selectedIndex].text 
+            : "Bold (100% S&P 500)";
+
+        let compareNames = [];
+        if (compareSelect && compareSelect.selectedOptions) {
+            for(let i=0; i < compareSelect.selectedOptions.length; i++) {
+                compareNames.push(compareSelect.selectedOptions[i].text);
+            }
+        }
+        if (compareNames.length === 0) compareNames = ["Safety (4% GIC / CD)"];
+
+        function getMult(name, sp, bond) {
+            if (name.includes("Safety")) return Math.pow(1.04, 7 / 365.25);
+            if (name.includes("Stable")) return bond;
+            if (name.includes("Prudent")) return (0.7 * bond) + (0.3 * sp);
+            if (name.includes("Measured")) return (0.4 * bond) + (0.6 * sp);
+            return sp; 
+        }
+
+        let chartLabels = [];
+        let activeVal = startVal;       
+        let benchmarkVal = startVal;    
+        let activeHistory = [];
+        let benchmarkHistory = [];      
+        
+        let compareVals = {};
+        let compareHistory = {};
+        compareNames.forEach(n => {
+            compareVals[n] = startVal;
+            compareHistory[n] = [];
+        });
+
+        let isInvested = true; 
+        let startYear = marketData[state.startIndex].rawDate.getFullYear();
+        let startMonth = marketData[state.startIndex].rawDate.getMonth();
+
+        // THE FIX: Loop the entire timeline, padding with 'null' outside the handles
+        for (let i = 0; i < marketData.length; i++) {
+            let dataPoint = marketData[i];
+            
+            let currentDt = dataPoint.rawDate;
+            let monthDiff = (currentDt.getFullYear() - startYear) * 12 + (currentDt.getMonth() - startMonth) + 1;
+            let displayDate = state.isBlind ? `Month ${monthDiff}` : dataPoint.dateStr;
+            
+            chartLabels.push(displayDate);
+
+            // If outside the slider window, inject blank space
+            if (i < state.startIndex || i > state.endIndex) {
+                activeHistory.push(null);
+                compareNames.forEach(n => compareHistory[n].push(null));
+            } else {
+                // Inside the slider window, run the actual math
+                let transactionHere = state.transactions.find(t => t.week === i);
+                if (transactionHere) isInvested = (transactionHere.type === 'buy');
+
+                let activeMult = getMult(activeProfileName, dataPoint.spMult, dataPoint.bondMult);
+                
+                if (isInvested) activeVal = activeVal * activeMult;
+                benchmarkVal = benchmarkVal * activeMult;
+
+                compareNames.forEach(n => {
+                    let cMult = getMult(n, dataPoint.spMult, dataPoint.bondMult);
+                    compareVals[n] = compareVals[n] * cMult;
+                });
+
+                let weeklyContribution = (monthlyVal * 12) / 52.14; 
+                activeVal += weeklyContribution;
+                benchmarkVal += weeklyContribution;
+                compareNames.forEach(n => compareVals[n] += weeklyContribution);
+
+                activeHistory.push(activeVal);
+                compareNames.forEach(n => compareHistory[n].push(compareVals[n]));
+            }
+        }
+
+        let dateDisplay = document.getElementById('slider-display-val');
+        if (dateDisplay) {
+            let endDt = marketData[state.endIndex].rawDate;
+            let endMonthDiff = (endDt.getFullYear() - startYear) * 12 + (endDt.getMonth() - startMonth) + 1;
+            
+            let startText = state.isBlind ? `Month 1` : marketData[state.startIndex].dateStr;
+            let endText = state.isBlind ? `Month ${endMonthDiff}` : marketData[state.endIndex].dateStr;
+            dateDisplay.innerHTML = `${startText} — ${endText}`;
+        }
+
+        let realStartDateStr = marketData[state.startIndex].dateStr;
+        let realEndDateStr = marketData[state.endIndex].dateStr;
+        let activeWeeks = state.endIndex - state.startIndex + 1; 
+
+        drawChart(chartLabels, activeHistory, compareHistory, compareNames);
+        updateMetrics(startVal, monthlyVal, benchmarkVal, activeVal, activeWeeks, realStartDateStr, realEndDateStr);
+    }
+   // --- 5. CHART DRAWING ---
+    function drawChart(chartLabels, activeHistory, compareHistory, compareNames) {
+        let traces = [];
+        let colors = ['#888888', '#9C27B0', '#FF9800', '#03A9F4']; 
+
+        compareNames.forEach((n, idx) => {
+            traces.push({
+                x: chartLabels,
+                y: compareHistory[n],
+                name: n,
+                type: 'scatter',
+                mode: 'lines',
+                line: { dash: 'dash', color: colors[idx % colors.length], width: 2 },
+                hovertemplate: '%{x}<br>$%{y:,.0f}<extra></extra>' 
+            });
+        });
+
+        traces.push({
+            x: chartLabels,
+            y: activeHistory,
+            name: 'Your Active Trading',
+            type: 'scatter',
+            mode: 'lines',
+            fill: 'tozeroy',
+            line: { color: '#4CAF50', width: 3 }, 
+            fillcolor: 'rgba(76, 175, 80, 0.3)',
+            hovertemplate: '%{x}<br>$%{y:,.0f}<extra></extra>'
+        });
+
+       let layout = {
+            margin: { t: 10, l: 40, r: 20, b: 20 }, 
+            legend: { orientation: 'h', y: 1.1 },
+            xaxis: { showgrid: false, showticklabels: false },
+            yaxis: { gridcolor: '#eee' },
+            paper_bgcolor: 'transparent',
+            plot_bgcolor: 'transparent',
+            hoverlabel: { font: { color: '#ffffff' } } 
+        };
+
+        Plotly.react('chart-container', traces, layout, {displayModeBar: false, responsive: true});
+    }
+
+    // --- 6. UI UPDATES ---
+    function updateMetrics(start, monthly, finalHold, finalActive, weeks, realStartDateStr, realEndDateStr) {
+        const formatCur = (num) => '$' + Math.round(num).toLocaleString();
+        
+        let netInvested = start + (monthly * 12 / 52.14) * weeks;
+        let outperforming = finalActive - finalHold;
+        
+        let returnPct = 0;
+        let startDate = new Date(realStartDateStr);
+        let endDate = new Date(realEndDateStr);
+        let years = (endDate - startDate) / (1000 * 60 * 60 * 24 * 365.25);
+
+        if (years > 0) {
+            if (monthly === 0) {
+                returnPct = (Math.pow(finalActive / start, 1 / years) - 1) * 100;
+            } else {
+                let cashFlows = [{ amount: -start, t: 0 }];
+                let totalMonths = Math.floor(years * 12);
+                for (let i = 1; i <= totalMonths; i++) {
+                    cashFlows.push({ amount: -monthly, t: (i / 12) });
+                }
+                cashFlows.push({ amount: finalActive, t: years });
+
+                let rate = 0.1;
+                for (let i = 0; i < 50; i++) {
+                    let f = 0; let df = 0;
+                    for (let cf of cashFlows) {
+                        f += cf.amount / Math.pow(1 + rate, cf.t);
+                        df -= (cf.t * cf.amount) / Math.pow(1 + rate, cf.t + 1);
+                    }
+                    if (Math.abs(f) < 0.001 || df === 0) break;
+                    rate = rate - f / df;
+                }
+                returnPct = rate * 100;
+            }
+        }
+
+        const setHtml = (id, val) => { if(document.getElementById(id)) document.getElementById(id).innerHTML = val; };
+        
+        setHtml('m-user', formatCur(finalActive));
+        setHtml('m-hold', formatCur(finalHold));
+        setHtml('m-invested', formatCur(netInvested));
+        setHtml('m-delta', (outperforming >= 0 ? '+' : '') + formatCur(outperforming));
+        setHtml('m-return', returnPct.toFixed(2) + '%');
+    }
+
+    // --- 7. EVENT HANDLERS ---
+    function executeTrade(type) {
+        let btnSell = document.getElementById('btn-sell');
+        let btnBuy = document.getElementById('btn-buy');
+
+        if (type === 'sell') {
+            btnSell.disabled = true;
+            btnBuy.disabled = false;
+            state.isBlind = true; // Enable Blind Mode when selling
+        } else if (type === 'buy') {
+            btnBuy.disabled = true;
+            btnSell.disabled = false;
+        }
+
+        state.transactions = state.transactions.filter(t => t.week !== state.endIndex);
+        state.transactions.push({ week: state.endIndex, type: type });
+        state.transactions.sort((a, b) => a.week - b.week);
+
+        recalculate();
+    }
+
+    function resetSimulation() {
+        state.transactions = [];
+        state.isBlind = false; // Turn off Blind Mode
+        
+        document.getElementById('btn-sell').disabled = false;
+        document.getElementById('btn-buy').disabled = true;
+
+        let sliderElement = document.getElementById('time-slider');
+        if (sliderElement && sliderElement.noUiSlider) {
+            sliderElement.noUiSlider.set([0, marketData.length - 1]);
+        }
+        recalculate();
+    }
+
+    // Attach native event listeners to the buttons
+    document.getElementById('btn-sell').addEventListener('click', function(e) { e.preventDefault(); executeTrade('sell'); });
+    document.getElementById('btn-buy').addEventListener('click', function(e) { e.preventDefault(); executeTrade('buy'); });
+    document.getElementById('btn-reset').addEventListener('click', function(e) { e.preventDefault(); resetSimulation(); });
+
+    document.getElementById('val-start')?.addEventListener('input', recalculate);
+    document.getElementById('val-monthly')?.addEventListener('input', recalculate);
+    document.querySelectorAll('select').forEach(sel => {
+        sel.addEventListener('change', recalculate);
+    });
+
+    // --- INIT ---
+    loadRealData();
+    initializeEngine();
+    recalculate();
+
+</script>
+</body>
+</html>
